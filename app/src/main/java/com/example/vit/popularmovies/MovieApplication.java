@@ -32,4 +32,7 @@ public class MovieApplication extends Application {
         return application;
     }
 
+    public Bus getBus(){
+        return this.bus;
+    }
 }
