@@ -1,39 +1,49 @@
 package com.example.vit.popularmovies;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
+
+import com.example.vit.popularmovies.rest.model.Movie;
+import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 /**
  * Created by Vit on 2015-07-07.
  */
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
 
-    private String[] dataset;
+    static final String CLASS = MoviesAdapter.class.getSimpleName() + ": ";
+
+    List<Movie> moviesList;
+    private Context context;
 
     // Provide a reference to the views for each data item
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        public TextView textView;
+        public ImageView poster;
+
         public ViewHolder(View v) {
             super(v);
-            textView = (TextView) v.findViewById(R.id.tvItemTitle);
+            poster = (ImageView) v.findViewById(R.id.ivItemPoster);
         }
     }
 
-    public MoviesAdapter(String[] dataset) {
-        this.dataset = dataset;
+    public MoviesAdapter(Context context, List<Movie> data) {
+        this.context = context;
+        this.moviesList = data;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public MoviesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
+    public MoviesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.test_grid_item, parent, false);
+                .inflate(R.layout.movies_grid_item, parent, false);
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
@@ -41,14 +51,29 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.textView.setText(dataset[position]);
+        //holder.textView.setText(dataset[position]);
+        Log.d(MovieApplication.TAG, CLASS + "url: " + buildUrl(moviesList.get(position).getPosterPath()));
 
+        Picasso.with(context).load(buildUrl(moviesList.get(position).getPosterPath()))
+                .error(R.drawable.placeholder)
+                .placeholder(R.drawable.placeholder)
+                .into(holder.poster);
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return dataset.length;
+        return moviesList.size();
+    }
+
+    public void setData(List<Movie> data){
+        this.moviesList.clear();
+        moviesList.addAll(data);
+        notifyDataSetChanged();
+    }
+
+    public String buildUrl(String posterPath) {
+        final String size = "w185";
+        return "http://image.tmdb.org/t/p/" + size + "/" + posterPath;
     }
 
 }
