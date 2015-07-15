@@ -87,7 +87,6 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
 
     @Override
     public void onItemClick(View view, int position) {
-        Log.d(MovieApplication.TAG, CLASS + "onItemClick pos = " 
-                + position + ", title = " + moviesList.get(position).getOriginalTitle());
+        bus.post(new Event.ShowMovieDetail(moviesList.get(position)));
     }
 }
