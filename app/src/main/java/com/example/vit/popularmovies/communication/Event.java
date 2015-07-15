@@ -12,7 +12,16 @@ public abstract class Event {
     public Event(){}
 
     public static class LoadMoviesEvent extends Event{
-        public LoadMoviesEvent(){
+
+        //Optional parameters
+        private String sortBy;
+
+        public LoadMoviesEvent(String sortBy){
+            this.sortBy = sortBy;
+        }
+
+        public String getSortBy() {
+            return sortBy;
         }
     }
 

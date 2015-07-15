@@ -1,10 +1,13 @@
 package com.example.vit.popularmovies;
 
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +26,8 @@ import java.util.List;
  */
 public class MoviesFragment extends Fragment {
 
+    static final String CLASS = MoviesFragment.class.getSimpleName() + ": ";
+
     private RecyclerView rvMoviesGrid;
     private RecyclerView.LayoutManager layoutManager;
     private MoviesAdapter adapter;
@@ -39,8 +44,15 @@ public class MoviesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
+        Log.d(MovieApplication.TAG, CLASS + " settings, order by = "
+                + sharedPreferences.getString(getString(R.string.pref_order_key)
+                , getString(R.string.param_sort_by_popularity_desc)));
+
         bus.register(this);
-        bus.post(new Event.LoadMoviesEvent());
+        bus.post(new Event.LoadMoviesEvent(sharedPreferences.getString(getString(R.string.pref_order_key)
+                , getString(R.string.param_sort_by_popularity_desc))));
     }
 
     @Nullable

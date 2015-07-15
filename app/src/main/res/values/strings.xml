@@ -3,4 +3,46 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+
+    <!-- PREFERENCE  -->
+    <string name="title_activity_preference">Settings</string>
+
+    <string name="pref_order_key" translatable="false">sort_order</string>
+    <string name="pref_order_title">Sort order</string>
+    <string name="pref_order_summary">Choose the order in which the movies list will be sorted</string>
+
+    <string name="pref_order_dialog_title">Sort movies in order by:</string>
+    <string name="pref_oder_default">@string/pref_order_most_popular</string>
+
+    <string name="pref_order_most_popular">most popular</string>
+    <string name="pref_order_highest_rated">highest-rated</string>
+    <string name="pref_order_vote_count">vote count</string>
+    <string name="pref_order_release_date">release date</string>
+    <string name="pref_order_revenue">revenue</string>
+
+    <string-array name="pref_order_entries">
+        <item>@string/pref_order_most_popular</item>
+        <item>@string/pref_order_highest_rated</item>
+        <item>@string/pref_order_vote_count</item>
+        <item>@string/pref_order_release_date</item>
+        <item>@string/pref_order_revenue</item>
+    </string-array>
+
+    <string-array name="pref_order_values">
+        <item>@string/param_sort_by_popularity_desc</item>
+        <item>@string/param_sort_by_vote_average_desc</item>
+        <item>@string/param_sort_by_vote_count_desc</item>
+        <item>@string/param_sort_by_release_date_desc</item>
+        <item>@string/param_sort_by_revenue_desc</item>
+    </string-array>
+
+    <!-- Optional parameters for the movie db API -->
+    <string name="param_sort_by_popularity_desc" translatable="false">popularity.desc</string>
+    <string name="param_sort_by_vote_average_desc" translatable="false">vote_average.desc</string>
+    <string name="param_sort_by_vote_count_desc" translatable="false">vote_count.desc</string>
+    <string name="param_sort_by_release_date_desc" translatable="false">release_date.desc</string>
+    <string name="param_sort_by_revenue_desc" translatable="false">revenue.desc</string>
+
+
 </resources>

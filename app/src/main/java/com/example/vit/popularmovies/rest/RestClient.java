@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.example.vit.popularmovies.MovieApplication;
 import com.example.vit.popularmovies.communication.Event;
-import com.example.vit.popularmovies.rest.conf.Constants;
+import com.example.vit.popularmovies.rest.conf.ApiConfig;
 import com.example.vit.popularmovies.rest.model.Page;
 import com.example.vit.popularmovies.rest.service.ApiService;
 import com.google.gson.Gson;
@@ -49,7 +49,7 @@ public class RestClient {
 
     @Subscribe
     public void onLoadMoviesEvent(Event.LoadMoviesEvent event){
-        apiService.getMovie("popularity.desc", Constants.API_KEY, new Callback<Page>() {
+        apiService.getMovie(event.getSortBy(), ApiConfig.API_KEY, new Callback<Page>() {
             @Override
             public void success(Page page, retrofit.client.Response response) {
                 Log.d(MovieApplication.TAG, CLASS + "success size = " + page.getMovies().size());
