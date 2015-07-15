@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.example.vit.popularmovies.communication.BusProvider;
 import com.example.vit.popularmovies.communication.Event;
@@ -24,7 +25,7 @@ import java.util.List;
 /**
  * Created by Vit on 2015-07-07.
  */
-public class MoviesFragment extends Fragment {
+public class MoviesFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener {
 
     static final String CLASS = MoviesFragment.class.getSimpleName() + ": ";
 
@@ -38,7 +39,6 @@ public class MoviesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         bus = BusProvider.getInstance();
-        //bus = ((MovieApplication)getActivity().getApplication()).getBus();
     }
 
     @Override
@@ -63,6 +63,8 @@ public class MoviesFragment extends Fragment {
         rvMoviesGrid = (RecyclerView) view.findViewById(R.id.rvMoviesGrid);
         // use a grid layout manager
         layoutManager = new GridLayoutManager(getActivity().getBaseContext(), 2);
+        rvMoviesGrid.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity().getBaseContext(), this));
         rvMoviesGrid.setLayoutManager(layoutManager);
 
         // specify an adapter
@@ -80,5 +82,12 @@ public class MoviesFragment extends Fragment {
     @Subscribe
     public void onLoadedMoviesEvent(Event.LoadedMoviesEvent event){
         adapter.setData(event.getMovieList());
+    }
+
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Log.d(MovieApplication.TAG, CLASS + "onItemClick pos = " 
+                + position + ", title = " + moviesList.get(position).getOriginalTitle());
     }
 }
