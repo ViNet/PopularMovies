@@ -36,4 +36,17 @@ public abstract class Event {
             return movieList;
         }
     }
+
+
+    public static class ShowMovieDetail extends Event{
+        private com.example.vit.popularmovies.rest.model.Movie movie;
+
+        public ShowMovieDetail(Movie movie){
+            this.movie = movie;
+        }
+
+        public Movie getMovie(){
+            return this.movie;
+        }
+    }
 }
