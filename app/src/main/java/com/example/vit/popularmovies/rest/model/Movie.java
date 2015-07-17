@@ -2,33 +2,37 @@ package com.example.vit.popularmovies.rest.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
+
 /**
  * Created by Vit on 26.06.2015.
  */
-public class Movie {
+@Parcel
+public class Movie{
 
-    private Integer id;
-    private Boolean adult;
+    Integer id;
+    Boolean adult;
     @SerializedName("backdrop_path")
-    private String backdropPath;
+    String backdropPath;
     @SerializedName("genre_ids")
-    private Integer[] genreIds;
+    Integer[] genreIds;
     @SerializedName("original_language")
-    private String originalLanguage;
+    String originalLanguage;
     @SerializedName("original_title")
-    private String originalTitle;
-    private String overview;
+    String originalTitle;
+    String overview;
     @SerializedName("release_date")
-    private String releaseDate;
+    String releaseDate;
     @SerializedName("poster_path")
-    private String posterPath;
-    private Double popularity;
-    private String title;
-    private Boolean video;
+    String posterPath;
+    Double popularity;
+    String title;
+    Boolean video;
     @SerializedName("vote_average")
-    private Double voteAverage;
+    Double voteAverage;
     @SerializedName("vote_count")
-    private Integer voteCount;
+    Integer voteCount;
 
 
     public Movie() {
@@ -89,4 +93,7 @@ public class Movie {
     public Integer getVoteCount() {
         return this.voteCount;
     }
+
+
+
 }

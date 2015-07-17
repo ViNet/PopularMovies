@@ -13,6 +13,9 @@ import com.example.vit.popularmovies.communication.Event;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
+import org.parceler.Parcel;
+import org.parceler.Parcels;
+
 
 public class MainActivity extends AppCompatActivity{
 
@@ -66,6 +69,14 @@ public class MainActivity extends AppCompatActivity{
     public void onShowMovieDetailEvent(Event.ShowMovieDetail event){
         Log.d(TAG, CLASS + "onShowMovieDetailEvent()"
                 + " title = " + event.getMovie().getOriginalTitle());
+
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(com.example.vit.popularmovies.rest.model.Movie.class.getSimpleName()
+                , Parcels.wrap(event.getMovie()));
+        startActivity(intent);
+
+
+
     }
 
 }
