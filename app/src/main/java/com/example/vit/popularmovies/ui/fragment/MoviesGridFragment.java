@@ -1,4 +1,4 @@
-package com.example.vit.popularmovies;
+package com.example.vit.popularmovies.ui.fragment;
 
 import android.app.Fragment;
 import android.content.SharedPreferences;
@@ -11,11 +11,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
+import com.example.vit.popularmovies.MovieApplication;
+import com.example.vit.popularmovies.R;
+import com.example.vit.popularmovies.ui.RecyclerItemClickListener;
 import com.example.vit.popularmovies.communication.BusProvider;
 import com.example.vit.popularmovies.communication.Event;
 import com.example.vit.popularmovies.rest.model.Movie;
+import com.example.vit.popularmovies.ui.adapter.MoviesAdapter;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -25,9 +28,9 @@ import java.util.List;
 /**
  * Created by Vit on 2015-07-07.
  */
-public class MoviesFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener {
+public class MoviesGridFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener {
 
-    static final String CLASS = MoviesFragment.class.getSimpleName() + ": ";
+    static final String CLASS = MoviesGridFragment.class.getSimpleName() + ": ";
 
     private RecyclerView rvMoviesGrid;
     private RecyclerView.LayoutManager layoutManager;

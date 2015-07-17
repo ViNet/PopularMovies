@@ -1,4 +1,4 @@
-package com.example.vit.popularmovies;
+package com.example.vit.popularmovies.ui.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,6 +6,8 @@ import android.util.Log;
 
 import org.parceler.Parcels;
 
+import com.example.vit.popularmovies.MovieApplication;
+import com.example.vit.popularmovies.R;
 import com.example.vit.popularmovies.rest.model.Movie;
 
 /**

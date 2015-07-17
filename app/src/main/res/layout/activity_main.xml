@@ -12,7 +12,7 @@
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/moviesContaient"
-        android:name="com.example.vit.popularmovies.MoviesFragment"
+        android:name="com.example.vit.popularmovies.ui.fragment.MoviesGridFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

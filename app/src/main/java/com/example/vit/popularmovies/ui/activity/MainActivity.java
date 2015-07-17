@@ -1,4 +1,4 @@
-package com.example.vit.popularmovies;
+package com.example.vit.popularmovies.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,12 +8,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.example.vit.popularmovies.R;
 import com.example.vit.popularmovies.communication.BusProvider;
 import com.example.vit.popularmovies.communication.Event;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
-import org.parceler.Parcel;
 import org.parceler.Parcels;
 
 

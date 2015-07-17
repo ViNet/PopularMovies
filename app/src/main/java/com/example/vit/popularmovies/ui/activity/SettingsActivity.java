@@ -1,4 +1,4 @@
-package com.example.vit.popularmovies;
+package com.example.vit.popularmovies.ui.activity;
 
 
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import com.example.vit.popularmovies.R;
 
 public class SettingsActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.example.vit.popularmovies;
+package com.example.vit.popularmovies.ui;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
