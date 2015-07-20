@@ -5,7 +5,7 @@
 
     <!-- Detail screen  -->
     <!-- padding top/bottom for movie detail title -->
-    <dimen name="detail_title_vertical_padding">16dp</dimen>
+    <dimen name="detail_title_vertical_padding">36dp</dimen>
     <!-- padding left for movie detail title -->
     <dimen name="detail_title_left_padding">62dp</dimen>
 
