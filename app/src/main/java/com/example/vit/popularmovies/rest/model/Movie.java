@@ -14,7 +14,7 @@ public class Movie{
     Integer id;
     Boolean adult;
     @SerializedName("backdrop_path")
-    String backdropPath;
+        String backdropPath;
     @SerializedName("genre_ids")
     Integer[] genreIds;
     @SerializedName("original_language")

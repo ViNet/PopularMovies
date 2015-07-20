@@ -1,11 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_movie_detail">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello detail fragment"/>
+        android:orientation="vertical">
 
-</LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvDetailTitle"
+            android:singleLine="true"
+            android:background="@color/background_movie_title"
+            android:paddingBottom="@dimen/detail_title_vertical_padding"
+            android:paddingTop="@dimen/detail_title_vertical_padding"
+            android:paddingLeft="@dimen/detail_title_left_padding"
+            android:textColor="@color/text_movie_title"
+            android:textSize="36sp"
+            android:text="Chappie"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/detail_content_padding"
+            android:paddingRight="@dimen/detail_content_padding"
+            android:paddingTop="@dimen/detail_content_padding">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/ivDetailPoster"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@mipmap/ic_launcher" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvDetailYear"
+                    android:textColor="@color/text_primary"
+                    android:textSize="26sp"
+                    android:text="2015"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvDetailRuntime"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/text_primary"
+                    android:textSize="20sp"
+                    android:textStyle="italic"
+                    android:text="120min"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvDetailRating"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    android:text="8.1/10"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="mark as favorite" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvDetailOverview"
+            android:paddingLeft="@dimen/detail_content_padding"
+            android:paddingRight="@dimen/detail_content_padding"
+            android:paddingTop="@dimen/detail_content_padding"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            android:text="Overview"/>
+
+    </LinearLayout>
+
+</ScrollView>
