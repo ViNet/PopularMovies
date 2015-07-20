@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
+        app:navigationIcon="@drawable/abc_ic_ab_back_mtrl_am_alpha"
         />
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
