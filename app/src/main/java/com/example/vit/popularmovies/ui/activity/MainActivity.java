@@ -70,9 +70,11 @@ public class MainActivity extends AppCompatActivity{
         Log.d(TAG, CLASS + "onShowMovieDetailEvent()"
                 + " title = " + event.getMovie().getOriginalTitle());
 
-        Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra(com.example.vit.popularmovies.rest.model.Movie.class.getSimpleName()
+        Bundle args = new Bundle();
+        args.putParcelable(com.example.vit.popularmovies.rest.model.Movie.class.getSimpleName()
                 , Parcels.wrap(event.getMovie()));
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra("args", args);
         startActivity(intent);
 
 

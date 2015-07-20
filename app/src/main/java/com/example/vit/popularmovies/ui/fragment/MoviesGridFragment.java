@@ -61,7 +61,7 @@ public class MoviesGridFragment extends Fragment implements RecyclerItemClickLis
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_movies, container, false);
+        View view = inflater.inflate(R.layout.fragment_grid_movies, container, false);
 
         rvMoviesGrid = (RecyclerView) view.findViewById(R.id.rvMoviesGrid);
         // use a grid layout manager

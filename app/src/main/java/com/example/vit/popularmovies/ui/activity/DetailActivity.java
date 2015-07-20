@@ -9,6 +9,7 @@ import org.parceler.Parcels;
 import com.example.vit.popularmovies.MovieApplication;
 import com.example.vit.popularmovies.R;
 import com.example.vit.popularmovies.rest.model.Movie;
+import com.example.vit.popularmovies.ui.fragment.MovieDetailFragment;
 
 /**
  * Created by Vit on 2015-07-17.
@@ -22,8 +23,9 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        Movie movie = Parcels.unwrap(getIntent().
-                getParcelableExtra(com.example.vit.popularmovies.rest.model.Movie.class.getSimpleName()));
-        Log.d(MovieApplication.TAG, CLASS + "onCreate() " + movie.getTitle());
+        Bundle args = getIntent().getBundleExtra("args");
+
+        getFragmentManager().beginTransaction().
+                replace(R.id.detail_container, MovieDetailFragment.newInstance(args)).commit();
     }
 }
