@@ -45,4 +45,8 @@
     <string name="param_sort_by_revenue_desc" translatable="false">revenue.desc</string>
 
 
+    <!-- Detail activity/fragment -->
+    <string name="title_detail_activity">Movie Detail</string>
+
+
 </resources>
