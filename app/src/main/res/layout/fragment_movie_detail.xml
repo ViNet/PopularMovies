@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/tvDetailTitle"
             android:singleLine="true"
-            android:background="@drawable/detail_title_shape"
+            android:background="@color/background_movie_title"
             android:includeFontPadding="false"
             android:paddingBottom="@dimen/detail_title_vertical_padding"
             android:paddingTop="@dimen/detail_title_vertical_padding"
@@ -22,6 +22,12 @@
             android:textColor="@color/text_movie_title"
             android:textSize="36sp"
             android:text="Chappie"/>
+
+        <!-- SHADOW -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@drawable/shadow_shape"/>
 
         <LinearLayout
             android:layout_width="match_parent"
