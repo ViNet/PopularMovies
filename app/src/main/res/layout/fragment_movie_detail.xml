@@ -40,7 +40,8 @@
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:paddingRight="@dimen/detail_content_padding">
 
                 <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/ivDetailPoster"
@@ -101,7 +102,7 @@
             android:paddingRight="@dimen/detail_content_padding"
             android:paddingTop="@dimen/detail_content_padding"
             android:textColor="@color/text_primary"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:text="Overview"/>
 
     </LinearLayout>
