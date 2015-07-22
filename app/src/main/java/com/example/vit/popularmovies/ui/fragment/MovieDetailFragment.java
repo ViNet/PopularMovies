@@ -12,18 +12,21 @@ import android.widget.TextView;
 
 import com.example.vit.popularmovies.MovieApplication;
 import com.example.vit.popularmovies.R;
+import com.example.vit.popularmovies.communication.BusProvider;
+import com.example.vit.popularmovies.communication.Event;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
 
 import java.text.SimpleDateFormat;
 
-/**
- * Created by Vit on 2015-07-20.
- */
+
 public class MovieDetailFragment extends Fragment {
 
     static final String CLASS = MovieDetailFragment.class.getSimpleName() + ": ";
+    Bus bus = BusProvider.getInstance();
 
     public static MovieDetailFragment newInstance(int movieId){
         MovieDetailFragment fragment =  new MovieDetailFragment();
@@ -39,6 +42,14 @@ public class MovieDetailFragment extends Fragment {
         Bundle args = getArguments();
         int id = args.getInt("id");
 
+        Log.d(MovieApplication.TAG, CLASS + " id = " + id);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        bus.register(this);
+        bus.post(new Event.LoadDetailedMovieEvent(getArguments().getInt("id")));
     }
 
     @Nullable
@@ -66,6 +77,17 @@ public class MovieDetailFragment extends Fragment {
                 .into(ivPoster);
 */
         return view;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        bus.unregister(this);
+    }
+
+    @Subscribe
+    public void onLoadedDetailedMovieEvent(Event.LoadedDetailedMovieEvent event){
+        Log.d(MovieApplication.TAG, CLASS + "loaded = " + event.getDetailedMovie().getOriginalTitle());
     }
 
     public String buildUrl(String posterPath) {

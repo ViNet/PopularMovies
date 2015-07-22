@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.vit.popularmovies.MovieApplication;
 import com.example.vit.popularmovies.communication.Event;
 import com.example.vit.popularmovies.rest.conf.ApiConfig;
+import com.example.vit.popularmovies.rest.model.DetailedMovie;
 import com.example.vit.popularmovies.rest.model.Page;
 import com.example.vit.popularmovies.rest.service.ApiService;
 import com.google.gson.Gson;
@@ -15,11 +16,10 @@ import com.squareup.otto.Subscribe;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
+import retrofit.client.Response;
 import retrofit.converter.GsonConverter;
 
-/**
- * Created by Vit on 26.06.2015.
- */
+
 public class RestClient {
     static final String CLASS = RestClient.class.getSimpleName() + ": ";
     private static final String BASE_URL = "http://api.themoviedb.org/3";
@@ -49,10 +49,10 @@ public class RestClient {
 
     @Subscribe
     public void onLoadMoviesEvent(Event.LoadMoviesEvent event){
-        apiService.getMovie(event.getSortBy(), ApiConfig.API_KEY, new Callback<Page>() {
+        apiService.getMovies(event.getSortBy(), ApiConfig.API_KEY, new Callback<Page>() {
             @Override
             public void success(Page page, retrofit.client.Response response) {
-                Log.d(MovieApplication.TAG, CLASS + "success size = " + page.getMovies().size());
+                //Log.d(MovieApplication.TAG, CLASS + "success size = " + page.getMovies().size());
                 bus.post(new Event.LoadedMoviesEvent(page.getMovies()));
             }
 
@@ -61,5 +61,21 @@ public class RestClient {
                 Log.d(MovieApplication.TAG, CLASS + "failure error = " + error.getMessage());
             }
         });
+    }
+
+    @Subscribe
+    public void onLoadDetailedMovieEvent(Event.LoadDetailedMovieEvent event){
+        apiService.getDetailedMovie(event.getId(), ApiConfig.API_KEY, new Callback<DetailedMovie>() {
+            @Override
+            public void success(DetailedMovie detailedMovie, Response response) {
+                bus.post(new Event.LoadedDetailedMovieEvent(detailedMovie));
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(MovieApplication.TAG, CLASS + "failure error = " + error.getMessage());
+            }
+        });
+
     }
 }
