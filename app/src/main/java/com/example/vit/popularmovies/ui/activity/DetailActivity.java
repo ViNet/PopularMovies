@@ -25,11 +25,8 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-
-        Bundle args = getIntent().getBundleExtra("args");
-
         getFragmentManager().beginTransaction().
-                replace(R.id.detail_container, MovieDetailFragment.newInstance(args)).commit();
+                replace(R.id.detail_container, MovieDetailFragment.newInstance(getIntent().getIntExtra("id", 0))).commit();
 
         initToolbar();
     }

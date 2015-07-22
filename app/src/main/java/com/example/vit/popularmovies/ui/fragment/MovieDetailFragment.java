@@ -24,10 +24,11 @@ import java.text.SimpleDateFormat;
 public class MovieDetailFragment extends Fragment {
 
     static final String CLASS = MovieDetailFragment.class.getSimpleName() + ": ";
-    com.example.vit.popularmovies.rest.model.Movie movie;
 
-    public static MovieDetailFragment newInstance(Bundle bundle){
+    public static MovieDetailFragment newInstance(int movieId){
         MovieDetailFragment fragment =  new MovieDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", movieId);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -35,12 +36,9 @@ public class MovieDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Bundle args = getArguments();
-        movie = Parcels.unwrap(
-                args.getParcelable(com.example.vit.popularmovies.rest.model.Movie.class.getSimpleName()));
+        int id = args.getInt("id");
 
-        Log.d(MovieApplication.TAG, CLASS + "title " + movie.getOriginalTitle());
     }
 
     @Nullable
@@ -55,18 +53,18 @@ public class MovieDetailFragment extends Fragment {
         TextView tvOverview = (TextView) view.findViewById(R.id.tvDetailOverview);
         ImageView ivPoster = (ImageView) view.findViewById(R.id.ivDetailPoster);
 
-        tvTitle.setText(movie.getTitle());
+        //tvTitle.setText(movie.getTitle());
         // getReleaseDate() returns date. Example 2013-10-08
         // so show only year
-        tvYear.setText(movie.getReleaseDate().substring(0,4));
-        tvRating.setText(movie.getVoteAverage().toString());
-        tvOverview.setText(movie.getOverview());
-
+        //tvYear.setText(movie.getReleaseDate().substring(0,4));
+        //tvRating.setText(movie.getVoteAverage().toString());
+        //tvOverview.setText(movie.getOverview());
+/*
         Picasso.with(getActivity().getBaseContext()).load(buildUrl(movie.getPosterPath()))
                 .error(R.drawable.placeholder)
                 .placeholder(R.drawable.placeholder)
                 .into(ivPoster);
-
+*/
         return view;
     }
 
