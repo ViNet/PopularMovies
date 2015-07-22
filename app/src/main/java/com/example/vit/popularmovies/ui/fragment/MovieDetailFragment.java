@@ -1,6 +1,8 @@
 package com.example.vit.popularmovies.ui.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Movie;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -14,6 +16,7 @@ import com.example.vit.popularmovies.MovieApplication;
 import com.example.vit.popularmovies.R;
 import com.example.vit.popularmovies.communication.BusProvider;
 import com.example.vit.popularmovies.communication.Event;
+import com.example.vit.popularmovies.rest.model.DetailedMovie;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -28,8 +31,17 @@ public class MovieDetailFragment extends Fragment {
     static final String CLASS = MovieDetailFragment.class.getSimpleName() + ": ";
     Bus bus = BusProvider.getInstance();
 
-    public static MovieDetailFragment newInstance(int movieId){
-        MovieDetailFragment fragment =  new MovieDetailFragment();
+    TextView tvTitle;
+    TextView tvYear;
+    TextView tvRuntime;
+    TextView tvRating;
+    TextView tvOverview;
+    ImageView ivPoster;
+
+    DetailedMovie detailedMovie;
+
+    public static MovieDetailFragment newInstance(int movieId) {
+        MovieDetailFragment fragment = new MovieDetailFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("id", movieId);
         fragment.setArguments(bundle);
@@ -39,44 +51,48 @@ public class MovieDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle args = getArguments();
-        int id = args.getInt("id");
+        //Log.d(MovieApplication.TAG, CLASS + "onCreate()");
 
-        Log.d(MovieApplication.TAG, CLASS + " id = " + id);
+        if (savedInstanceState != null) {
+            this.detailedMovie = Parcels.
+                    unwrap(savedInstanceState.getParcelable(DetailedMovie.class.getSimpleName()));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //Log.d(MovieApplication.TAG, CLASS + "onSaveInstanceState()");
+        outState.putParcelable(DetailedMovie.class.getSimpleName(), Parcels.wrap(this.detailedMovie));
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_movie_detail, container, false);
+
+        tvTitle = (TextView) view.findViewById(R.id.tvDetailTitle);
+        tvYear = (TextView) view.findViewById(R.id.tvDetailYear);
+        tvRuntime = (TextView) view.findViewById(R.id.tvDetailRuntime);
+        tvRating = (TextView) view.findViewById(R.id.tvDetailRating);
+        tvOverview = (TextView) view.findViewById(R.id.tvDetailOverview);
+        ivPoster = (ImageView) view.findViewById(R.id.ivDetailPoster);
+        return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
         bus.register(this);
-        bus.post(new Event.LoadDetailedMovieEvent(getArguments().getInt("id")));
-    }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_movie_detail ,container, false);
-
-        TextView tvTitle = (TextView) view.findViewById(R.id.tvDetailTitle);
-        TextView tvYear = (TextView) view.findViewById(R.id.tvDetailYear);
-        TextView tvRuntime = (TextView) view.findViewById(R.id.tvDetailRuntime);
-        TextView tvRating = (TextView) view.findViewById(R.id.tvDetailRating);
-        TextView tvOverview = (TextView) view.findViewById(R.id.tvDetailOverview);
-        ImageView ivPoster = (ImageView) view.findViewById(R.id.ivDetailPoster);
-
-        //tvTitle.setText(movie.getTitle());
-        // getReleaseDate() returns date. Example 2013-10-08
-        // so show only year
-        //tvYear.setText(movie.getReleaseDate().substring(0,4));
-        //tvRating.setText(movie.getVoteAverage().toString());
-        //tvOverview.setText(movie.getOverview());
-/*
-        Picasso.with(getActivity().getBaseContext()).load(buildUrl(movie.getPosterPath()))
-                .error(R.drawable.placeholder)
-                .placeholder(R.drawable.placeholder)
-                .into(ivPoster);
-*/
-        return view;
+        // if detailedMovie is null than loading data
+        if (this.detailedMovie == null) {
+            bus.post(new Event.LoadDetailedMovieEvent(getArguments().getInt("id")));
+        }
+        // if detailedMovie is not null than orientation was changed and we'll not load data again
+        else {
+            setData();
+        }
     }
 
     @Override
@@ -86,12 +102,28 @@ public class MovieDetailFragment extends Fragment {
     }
 
     @Subscribe
-    public void onLoadedDetailedMovieEvent(Event.LoadedDetailedMovieEvent event){
-        Log.d(MovieApplication.TAG, CLASS + "loaded = " + event.getDetailedMovie().getOriginalTitle());
+    public void onLoadedDetailedMovieEvent(Event.LoadedDetailedMovieEvent event) {
+        this.detailedMovie = event.getDetailedMovie();
+        setData();
     }
 
     public String buildUrl(String posterPath) {
         final String size = "w185";
         return "http://image.tmdb.org/t/p/" + size + "/" + posterPath;
+    }
+
+    private void setData() {
+        tvTitle.setText(detailedMovie.getTitle());
+        // getReleaseDate() returns date. Example 2013-10-08
+        // so show only year
+        tvYear.setText(detailedMovie.getReleaseDate().substring(0, 4));
+        tvRuntime.setText(getString(R.string.runtime, String.valueOf(detailedMovie.getRuntime())));
+        tvRating.setText(getString(R.string.rating, String.valueOf(detailedMovie.getVoteAverage())));
+        tvOverview.setText(detailedMovie.getOverview());
+
+        Picasso.with(getActivity().getBaseContext()).load(buildUrl(detailedMovie.getPosterPath()))
+                .error(R.drawable.placeholder)
+                .placeholder(R.drawable.placeholder)
+                .into(ivPoster);
     }
 }

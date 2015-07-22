@@ -65,6 +65,7 @@ public class RestClient {
 
     @Subscribe
     public void onLoadDetailedMovieEvent(Event.LoadDetailedMovieEvent event){
+        Log.d(MovieApplication.TAG, CLASS + " Tey to load movie id = " + event.getId());
         apiService.getDetailedMovie(event.getId(), ApiConfig.API_KEY, new Callback<DetailedMovie>() {
             @Override
             public void success(DetailedMovie detailedMovie, Response response) {

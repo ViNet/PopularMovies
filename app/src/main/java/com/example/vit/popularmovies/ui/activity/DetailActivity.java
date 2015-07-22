@@ -13,9 +13,7 @@ import com.example.vit.popularmovies.R;
 import com.example.vit.popularmovies.rest.model.Movie;
 import com.example.vit.popularmovies.ui.fragment.MovieDetailFragment;
 
-/**
- * Created by Vit on 2015-07-17.
- */
+
 public class DetailActivity extends AppCompatActivity {
 
     static final String CLASS = DetailActivity.class.getSimpleName() + ":";
@@ -25,8 +23,10 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        getFragmentManager().beginTransaction().
-                replace(R.id.detail_container, MovieDetailFragment.newInstance(getIntent().getIntExtra("id", 0))).commit();
+        if(getFragmentManager().findFragmentById(R.id.detail_container) == null){
+            getFragmentManager().beginTransaction().
+                    replace(R.id.detail_container, MovieDetailFragment.newInstance(getIntent().getIntExtra("id", 0))).commit();
+        }
 
         initToolbar();
     }

@@ -2,9 +2,10 @@ package com.example.vit.popularmovies.rest.model;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by Vit on 2015-07-22.
- */
+import org.parceler.Parcel;
+
+
+@Parcel
 public class DetailedMovie {
 
     private Boolean adult;
@@ -32,9 +33,9 @@ public class DetailedMovie {
     private String title;
     private Boolean video;
     @SerializedName("vote_average")
-    Double voteAverage;
+    private Double voteAverage;
     @SerializedName("vote_count")
-    Double voteCount;
+    private Double voteCount;
 
     public boolean getAdult(){
         return this.adult;

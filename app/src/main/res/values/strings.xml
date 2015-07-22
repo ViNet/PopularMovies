@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">PopularMovies</string>
 
     <string name="hello_world">Hello world!</string>
@@ -47,6 +47,12 @@
 
     <!-- Detail activity/fragment -->
     <string name="title_detail_activity">Movie Detail</string>
+    <string name="runtime">
+        <xliff:g id="time" example="123">%1$s</xliff:g>min
+    </string>
+        <string name="rating">
+        <xliff:g id="rating" example="7.0">%1$s</xliff:g>/10
+    </string>
 
 
 </resources>
