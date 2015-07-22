@@ -1,12 +1,10 @@
 package com.example.vit.popularmovies.communication;
 
+import com.example.vit.popularmovies.rest.model.DetailedMovie;
 import com.example.vit.popularmovies.rest.model.Movie;
 
 import java.util.List;
 
-/**
- * Created by Vit on 2015-07-06.
- */
 public abstract class Event {
 
     public Event(){}
@@ -34,6 +32,30 @@ public abstract class Event {
 
         public List<Movie> getMovieList(){
             return movieList;
+        }
+    }
+
+    public static class LoadDetailedMovieEvent extends Event{
+        private int id;
+
+        public LoadDetailedMovieEvent(int movieId){
+            this.id = movieId;
+        }
+
+        public int getId(){
+            return this.id;
+        }
+    }
+
+    public static class LoadedDetailedMovieEvent extends Event{
+        private DetailedMovie detailedMovie;
+
+        public LoadedDetailedMovieEvent(DetailedMovie detailedMovie){
+            this.detailedMovie = detailedMovie;
+        }
+
+        public DetailedMovie getDetailedMovie(){
+            return this.detailedMovie;
         }
     }
 
