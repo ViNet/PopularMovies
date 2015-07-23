@@ -7,6 +7,7 @@ import com.example.vit.popularmovies.communication.Event;
 import com.example.vit.popularmovies.rest.conf.ApiConfig;
 import com.example.vit.popularmovies.rest.model.DetailedMovie;
 import com.example.vit.popularmovies.rest.model.Page;
+import com.example.vit.popularmovies.rest.model.TrailersResult;
 import com.example.vit.popularmovies.rest.service.ApiService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -65,7 +66,7 @@ public class RestClient {
 
     @Subscribe
     public void onLoadDetailedMovieEvent(Event.LoadDetailedMovieEvent event){
-        Log.d(MovieApplication.TAG, CLASS + " Tey to load movie id = " + event.getId());
+        Log.d(MovieApplication.TAG, CLASS + " Try to load movie id = " + event.getId());
         apiService.getDetailedMovie(event.getId(), ApiConfig.API_KEY, new Callback<DetailedMovie>() {
             @Override
             public void success(DetailedMovie detailedMovie, Response response) {
@@ -77,6 +78,22 @@ public class RestClient {
                 Log.d(MovieApplication.TAG, CLASS + "failure error = " + error.getMessage());
             }
         });
+    }
 
+    @Subscribe
+    public void onLoadVideosEvent(Event.LoadVideosEvent event){
+        Log.d(MovieApplication.TAG, CLASS + " Try to load videos for movie, id = " + event.getMovieId());
+
+        apiService.getVideosByMovieId(event.getMovieId(), ApiConfig.API_KEY, new Callback<TrailersResult>() {
+            @Override
+            public void success(TrailersResult trailersResult, Response response) {
+                bus.post(new Event.LoadedVideosEvent(trailersResult.getTrailers()));
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(MovieApplication.TAG, CLASS + "failure error = " + error.getMessage());
+            }
+        });
     }
 }

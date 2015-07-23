@@ -1,8 +1,6 @@
 package com.example.vit.popularmovies.ui.fragment;
 
-import android.app.Activity;
 import android.app.Fragment;
-import android.graphics.Movie;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -17,13 +15,14 @@ import com.example.vit.popularmovies.R;
 import com.example.vit.popularmovies.communication.BusProvider;
 import com.example.vit.popularmovies.communication.Event;
 import com.example.vit.popularmovies.rest.model.DetailedMovie;
+import com.example.vit.popularmovies.rest.model.Trailer;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
 
-import java.text.SimpleDateFormat;
+import java.util.List;
 
 
 public class MovieDetailFragment extends Fragment {
@@ -39,6 +38,7 @@ public class MovieDetailFragment extends Fragment {
     ImageView ivPoster;
 
     DetailedMovie detailedMovie;
+    List<Trailer> trailerList;
 
     public static MovieDetailFragment newInstance(int movieId) {
         MovieDetailFragment fragment = new MovieDetailFragment();
@@ -51,19 +51,23 @@ public class MovieDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Log.d(MovieApplication.TAG, CLASS + "onCreate()");
+        Log.d(MovieApplication.TAG, CLASS + "onCreate()");
 
         if (savedInstanceState != null) {
             this.detailedMovie = Parcels.
                     unwrap(savedInstanceState.getParcelable(DetailedMovie.class.getSimpleName()));
+            this.trailerList = Parcels.
+                    unwrap(savedInstanceState.getParcelable(Trailer.class.getSimpleName()));
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //Log.d(MovieApplication.TAG, CLASS + "onSaveInstanceState()");
+        Log.d(MovieApplication.TAG, CLASS + "onSaveInstanceState()");
         outState.putParcelable(DetailedMovie.class.getSimpleName(), Parcels.wrap(this.detailedMovie));
+        Log.d(MovieApplication.TAG, CLASS + "trailerlist size = " + trailerList.size());
+        outState.putParcelable(Trailer.class.getSimpleName(), Parcels.wrap(this.trailerList));
     }
 
     @Nullable
@@ -93,6 +97,14 @@ public class MovieDetailFragment extends Fragment {
         else {
             setData();
         }
+
+        if (this.trailerList == null) {
+            Log.d(MovieApplication.TAG, CLASS + "trailerList == null");
+            bus.post(new Event.LoadVideosEvent(getArguments().getInt("id")));
+        } else {
+            // fill videos
+            Log.d(MovieApplication.TAG, CLASS + "trailerList != null");
+        }
     }
 
     @Override
@@ -104,7 +116,20 @@ public class MovieDetailFragment extends Fragment {
     @Subscribe
     public void onLoadedDetailedMovieEvent(Event.LoadedDetailedMovieEvent event) {
         this.detailedMovie = event.getDetailedMovie();
+        //Log.d(MovieApplication.TAG, CLASS + "video: " + detailedMovie.getVideo());
         setData();
+    }
+
+    @Subscribe
+    public void onLoadedVideosEvent(Event.LoadedVideosEvent event) {
+        this.trailerList = event.getTrailerList();
+        if (!trailerList.isEmpty()) {
+            for (Trailer t : trailerList) {
+                Log.d(MovieApplication.TAG, CLASS + "name - " + t.getName());
+            }
+        } else {
+            Log.d(MovieApplication.TAG, CLASS + "Loaded video list is empty");
+        }
     }
 
     public String buildUrl(String posterPath) {

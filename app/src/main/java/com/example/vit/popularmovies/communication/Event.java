@@ -84,7 +84,7 @@ public abstract class Event {
         }
 
         public int getMovieId() {
-            return this.getMovieId();
+            return this.movieId;
         }
     }
 
