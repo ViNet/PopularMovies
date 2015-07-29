@@ -20,8 +20,7 @@
             android:paddingTop="@dimen/detail_title_vertical_padding"
             android:paddingLeft="@dimen/detail_title_left_padding"
             android:textColor="@color/text_movie_title"
-            android:textSize="36sp"
-            android:text="Chappie"/>
+            android:textSize="36sp" />
 
         <!-- SHADOW -->
         <View
@@ -48,8 +47,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
-                    android:scaleType="fitCenter"
-                    android:src="@mipmap/ic_launcher" />
+                    android:scaleType="fitCenter" />
 
             </FrameLayout>
 
@@ -64,8 +62,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/tvDetailYear"
                     android:textColor="@color/text_primary"
-                    android:textSize="26sp"
-                    android:text="2015"/>
+                    android:textSize="26sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -74,16 +71,14 @@
                     android:includeFontPadding="false"
                     android:textColor="@color/text_primary"
                     android:textSize="20sp"
-                    android:textStyle="italic"
-                    android:text="120min"/>
+                    android:textStyle="italic" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/tvDetailRating"
                     android:textColor="@color/text_secondary"
-                    android:textSize="14sp"
-                    android:text="8.1/10"/>
+                    android:textSize="14sp" />
 
                 <Button
                     android:layout_width="wrap_content"
@@ -102,8 +97,7 @@
             android:paddingRight="@dimen/detail_content_padding"
             android:paddingTop="@dimen/detail_content_padding"
             android:textColor="@color/text_primary"
-            android:textSize="14sp"
-            android:text="Overview"/>
+            android:textSize="14sp" />
 
         <!-- vertical divider -->
         <View
