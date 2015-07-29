@@ -1,8 +1,11 @@
 package com.example.vit.popularmovies.ui.fragment;
 
 import android.app.Fragment;
+import android.graphics.Movie;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +19,14 @@ import com.example.vit.popularmovies.communication.BusProvider;
 import com.example.vit.popularmovies.communication.Event;
 import com.example.vit.popularmovies.rest.model.DetailedMovie;
 import com.example.vit.popularmovies.rest.model.Trailer;
+import com.example.vit.popularmovies.ui.adapter.TrailersAdapter;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -36,6 +41,9 @@ public class MovieDetailFragment extends Fragment {
     TextView tvRating;
     TextView tvOverview;
     ImageView ivPoster;
+    RecyclerView rvTrailers;
+
+    TrailersAdapter adapter;
 
     DetailedMovie detailedMovie;
     List<Trailer> trailerList;
@@ -81,6 +89,12 @@ public class MovieDetailFragment extends Fragment {
         tvRating = (TextView) view.findViewById(R.id.tvDetailRating);
         tvOverview = (TextView) view.findViewById(R.id.tvDetailOverview);
         ivPoster = (ImageView) view.findViewById(R.id.ivDetailPoster);
+
+        rvTrailers = (RecyclerView) view.findViewById(R.id.rvTrailersList);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getBaseContext(),
+                LinearLayoutManager.HORIZONTAL, false);
+        rvTrailers.setLayoutManager(layoutManager);
+
         return view;
     }
 
@@ -88,6 +102,7 @@ public class MovieDetailFragment extends Fragment {
     public void onStart() {
         super.onStart();
         bus.register(this);
+        Log.d(MovieApplication.TAG, CLASS + "onStart()");
 
         // if detailedMovie is null than loading data
         if (this.detailedMovie == null) {
@@ -98,13 +113,22 @@ public class MovieDetailFragment extends Fragment {
             setData();
         }
 
-        if (this.trailerList == null) {
-            Log.d(MovieApplication.TAG, CLASS + "trailerList == null");
+        if(trailerList == null){
+            //this is the case when  data are not yet loaded any time
+            // try to load videos for this movie
+            Log.d(MovieApplication.TAG, CLASS + "load videos for a first time");
             bus.post(new Event.LoadVideosEvent(getArguments().getInt("id")));
+        } else if(trailerList.isEmpty()){
+            // this is the case when this movie hasn't videos
+            // hide layout
+            Log.d(MovieApplication.TAG, CLASS + "no videos for this movie");
         } else {
-            // fill videos
-            Log.d(MovieApplication.TAG, CLASS + "trailerList != null");
+            // this is the case when this movie has videos
+            // videos already downloaded
+            Log.d(MovieApplication.TAG, CLASS + "videos already loaded");
+            setupTrailersList();
         }
+
     }
 
     @Override
@@ -124,11 +148,9 @@ public class MovieDetailFragment extends Fragment {
     public void onLoadedVideosEvent(Event.LoadedVideosEvent event) {
         this.trailerList = event.getTrailerList();
         if (!trailerList.isEmpty()) {
-            for (Trailer t : trailerList) {
-                Log.d(MovieApplication.TAG, CLASS + "name - " + t.getName());
-            }
+            setupTrailersList();
         } else {
-            Log.d(MovieApplication.TAG, CLASS + "Loaded video list is empty");
+            // hide trailer list layout
         }
     }
 
@@ -150,5 +172,15 @@ public class MovieDetailFragment extends Fragment {
                 .error(R.drawable.placeholder)
                 .placeholder(R.drawable.placeholder)
                 .into(ivPoster);
+    }
+
+
+    private void setupTrailersList(){
+        if(adapter == null){
+            adapter = new TrailersAdapter(getActivity().getBaseContext(), trailerList);
+            rvTrailers.setAdapter(adapter);
+        } else {
+            adapter.setData(trailerList);
+        }
     }
 }

@@ -105,6 +105,38 @@
             android:textSize="14sp"
             android:text="Overview"/>
 
+        <!-- vertical divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/text_primary"
+            android:layout_marginRight="@dimen/detail_content_padding"
+            android:layout_marginLeft="@dimen/detail_content_padding"
+            android:layout_marginTop="@dimen/detail_content_padding"
+            android:layout_marginBottom="@dimen/detail_content_padding"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/text_primary"
+            android:paddingLeft="@dimen/detail_content_padding"
+            android:paddingRight="@dimen/detail_content_padding"
+            android:text="Trailers"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:background="@color/background_movie_detail"
+            android:id="@+id/rvTrailersList"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:clickable="true"
+            android:paddingLeft="@dimen/detail_content_padding"
+            android:paddingRight="@dimen/detail_content_padding"
+
+            />
+
     </LinearLayout>
 
 </ScrollView>

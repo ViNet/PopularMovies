@@ -15,9 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-/**
- * Created by Vit on 2015-07-07.
- */
+
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
 
     static final String CLASS = MoviesAdapter.class.getSimpleName() + ": ";
