@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.vit.popularmovies.MovieApplication;
@@ -42,6 +43,7 @@ public class MovieDetailFragment extends Fragment {
     TextView tvOverview;
     ImageView ivPoster;
     RecyclerView rvTrailers;
+    LinearLayout llTrailers;
 
     TrailersAdapter adapter;
 
@@ -94,6 +96,7 @@ public class MovieDetailFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getBaseContext(),
                 LinearLayoutManager.HORIZONTAL, false);
         rvTrailers.setLayoutManager(layoutManager);
+        llTrailers = (LinearLayout) view.findViewById(R.id.llTrailers);
 
         return view;
     }
@@ -118,17 +121,12 @@ public class MovieDetailFragment extends Fragment {
             // try to load videos for this movie
             Log.d(MovieApplication.TAG, CLASS + "load videos for a first time");
             bus.post(new Event.LoadVideosEvent(getArguments().getInt("id")));
-        } else if(trailerList.isEmpty()){
-            // this is the case when this movie hasn't videos
-            // hide layout
-            Log.d(MovieApplication.TAG, CLASS + "no videos for this movie");
-        } else {
+        } else if(!trailerList.isEmpty()){
             // this is the case when this movie has videos
             // videos already downloaded
             Log.d(MovieApplication.TAG, CLASS + "videos already loaded");
             setupTrailersList();
         }
-
     }
 
     @Override
@@ -149,8 +147,6 @@ public class MovieDetailFragment extends Fragment {
         this.trailerList = event.getTrailerList();
         if (!trailerList.isEmpty()) {
             setupTrailersList();
-        } else {
-            // hide trailer list layout
         }
     }
 
@@ -182,5 +178,6 @@ public class MovieDetailFragment extends Fragment {
         } else {
             adapter.setData(trailerList);
         }
+        llTrailers.setVisibility(View.VISIBLE);
     }
 }

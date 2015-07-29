@@ -4,21 +4,21 @@
     android:layout_height="match_parent"
     android:background="@color/background_movie_detail">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tvDetailTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tvDetailTitle"
-            android:singleLine="true"
             android:background="@color/background_movie_title"
             android:includeFontPadding="false"
             android:paddingBottom="@dimen/detail_title_vertical_padding"
-            android:paddingTop="@dimen/detail_title_vertical_padding"
             android:paddingLeft="@dimen/detail_title_left_padding"
+            android:paddingTop="@dimen/detail_title_vertical_padding"
+            android:singleLine="true"
             android:textColor="@color/text_movie_title"
             android:textSize="36sp" />
 
@@ -26,7 +26,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="3dp"
-            android:background="@drawable/shadow_shape"/>
+            android:background="@drawable/shadow_shape" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -58,25 +58,25 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tvDetailYear"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tvDetailYear"
                     android:textColor="@color/text_primary"
                     android:textSize="26sp" />
 
                 <TextView
+                    android:id="@+id/tvDetailRuntime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tvDetailRuntime"
                     android:includeFontPadding="false"
                     android:textColor="@color/text_primary"
                     android:textSize="20sp"
                     android:textStyle="italic" />
 
                 <TextView
+                    android:id="@+id/tvDetailRating"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tvDetailRating"
                     android:textColor="@color/text_secondary"
                     android:textSize="14sp" />
 
@@ -90,46 +90,17 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tvDetailOverview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tvDetailOverview"
             android:paddingLeft="@dimen/detail_content_padding"
             android:paddingRight="@dimen/detail_content_padding"
             android:paddingTop="@dimen/detail_content_padding"
             android:textColor="@color/text_primary"
             android:textSize="14sp" />
 
-        <!-- vertical divider -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/text_primary"
-            android:layout_marginRight="@dimen/detail_content_padding"
-            android:layout_marginLeft="@dimen/detail_content_padding"
-            android:layout_marginTop="@dimen/detail_content_padding"
-            android:layout_marginBottom="@dimen/detail_content_padding"
-            />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@color/text_primary"
-            android:paddingLeft="@dimen/detail_content_padding"
-            android:paddingRight="@dimen/detail_content_padding"
-            android:text="Trailers"
-            />
-
-        <android.support.v7.widget.RecyclerView
-            android:background="@color/background_movie_detail"
-            android:id="@+id/rvTrailersList"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:clickable="true"
-            android:paddingLeft="@dimen/detail_content_padding"
-            android:paddingRight="@dimen/detail_content_padding"
-
-            />
+        <!-- TRAILERS LAYOUT -->
+        <include layout="@layout/list_videos"/>
 
     </LinearLayout>
 
