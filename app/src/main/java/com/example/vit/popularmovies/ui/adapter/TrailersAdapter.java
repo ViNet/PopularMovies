@@ -2,11 +2,13 @@ package com.example.vit.popularmovies.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.vit.popularmovies.MovieApplication;
 import com.example.vit.popularmovies.R;
 import com.example.vit.popularmovies.rest.model.Trailer;
 import com.squareup.picasso.Picasso;
@@ -14,9 +16,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Vit on 2015-07-23.
- */
 public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.ViewHolder> {
 
     static final String CLASS = TrailersAdapter.class.getSimpleName() + ": ";
@@ -45,8 +44,7 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.ViewHo
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_trailers_list, parent, false);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+        return new ViewHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)

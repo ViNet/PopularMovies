@@ -1,9 +1,9 @@
 package com.example.vit.popularmovies.ui.fragment;
 
 import android.app.Fragment;
-import android.graphics.Movie;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,7 +27,6 @@ import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -72,40 +71,9 @@ public class MovieDetailFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.d(MovieApplication.TAG, CLASS + "onSaveInstanceState()");
-        outState.putParcelable(DetailedMovie.class.getSimpleName(), Parcels.wrap(this.detailedMovie));
-        Log.d(MovieApplication.TAG, CLASS + "trailerlist size = " + trailerList.size());
-        outState.putParcelable(Trailer.class.getSimpleName(), Parcels.wrap(this.trailerList));
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_movie_detail, container, false);
-
-        tvTitle = (TextView) view.findViewById(R.id.tvDetailTitle);
-        tvYear = (TextView) view.findViewById(R.id.tvDetailYear);
-        tvRuntime = (TextView) view.findViewById(R.id.tvDetailRuntime);
-        tvRating = (TextView) view.findViewById(R.id.tvDetailRating);
-        tvOverview = (TextView) view.findViewById(R.id.tvDetailOverview);
-        ivPoster = (ImageView) view.findViewById(R.id.ivDetailPoster);
-
-        rvTrailers = (RecyclerView) view.findViewById(R.id.rvTrailersList);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getBaseContext(),
-                LinearLayoutManager.HORIZONTAL, false);
-        rvTrailers.setLayoutManager(layoutManager);
-        llTrailers = (LinearLayout) view.findViewById(R.id.llTrailers);
-
-        return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        bus.register(this);
-        Log.d(MovieApplication.TAG, CLASS + "onStart()");
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.d(MovieApplication.TAG, CLASS + "onActivityCreated()");
 
         // if detailedMovie is null than loading data
         if (this.detailedMovie == null) {
@@ -129,10 +97,55 @@ public class MovieDetailFragment extends Fragment {
         }
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(MovieApplication.TAG, CLASS + "onCreateView()");
+        View view = inflater.inflate(R.layout.fragment_movie_detail, container, false);
+
+        tvTitle = (TextView) view.findViewById(R.id.tvDetailTitle);
+        tvYear = (TextView) view.findViewById(R.id.tvDetailYear);
+        tvRuntime = (TextView) view.findViewById(R.id.tvDetailRuntime);
+        tvRating = (TextView) view.findViewById(R.id.tvDetailRating);
+        tvOverview = (TextView) view.findViewById(R.id.tvDetailOverview);
+        ivPoster = (ImageView) view.findViewById(R.id.ivDetailPoster);
+
+        rvTrailers = (RecyclerView) view.findViewById(R.id.rvTrailersList);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getBaseContext(),
+                LinearLayoutManager.HORIZONTAL, false);
+        rvTrailers.setLayoutManager(layoutManager);
+        llTrailers = (LinearLayout) view.findViewById(R.id.llTrailers);
+
+        return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        bus.register(this);
+        Log.d(MovieApplication.TAG, CLASS + "onStart()");
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d(MovieApplication.TAG, CLASS + "onSaveInstanceState()");
+        outState.putParcelable(DetailedMovie.class.getSimpleName(), Parcels.wrap(this.detailedMovie));
+        Log.d(MovieApplication.TAG, CLASS + "trailerlist size = " + trailerList.size());
+        outState.putParcelable(Trailer.class.getSimpleName(), Parcels.wrap(this.trailerList));
+    }
+
     @Override
     public void onStop() {
         super.onStop();
         bus.unregister(this);
+        Log.d(MovieApplication.TAG, CLASS + "onStop()");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(MovieApplication.TAG, CLASS + "onDestroy()");
     }
 
     @Subscribe
