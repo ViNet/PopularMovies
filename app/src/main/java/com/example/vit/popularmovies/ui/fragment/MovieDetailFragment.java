@@ -19,7 +19,9 @@ import com.example.vit.popularmovies.R;
 import com.example.vit.popularmovies.communication.BusProvider;
 import com.example.vit.popularmovies.communication.Event;
 import com.example.vit.popularmovies.rest.model.DetailedMovie;
+import com.example.vit.popularmovies.rest.model.Movie;
 import com.example.vit.popularmovies.rest.model.Trailer;
+import com.example.vit.popularmovies.ui.RecyclerItemClickListener;
 import com.example.vit.popularmovies.ui.adapter.TrailersAdapter;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -30,7 +32,7 @@ import org.parceler.Parcels;
 import java.util.List;
 
 
-public class MovieDetailFragment extends Fragment {
+public class MovieDetailFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener{
 
     static final String CLASS = MovieDetailFragment.class.getSimpleName() + ": ";
     Bus bus = BusProvider.getInstance();
@@ -60,7 +62,7 @@ public class MovieDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(MovieApplication.TAG, CLASS + "onCreate()");
+        //Log.d(MovieApplication.TAG, CLASS + "onCreate()");
 
         if (savedInstanceState != null) {
             this.detailedMovie = Parcels.
@@ -73,7 +75,7 @@ public class MovieDetailFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d(MovieApplication.TAG, CLASS + "onActivityCreated()");
+        //Log.d(MovieApplication.TAG, CLASS + "onActivityCreated()");
 
         // if detailedMovie is null than loading data
         if (this.detailedMovie == null) {
@@ -87,12 +89,12 @@ public class MovieDetailFragment extends Fragment {
         if(trailerList == null){
             //this is the case when  data are not yet loaded any time
             // try to load videos for this movie
-            Log.d(MovieApplication.TAG, CLASS + "load videos for a first time");
+            //Log.d(MovieApplication.TAG, CLASS + "load videos for a first time");
             bus.post(new Event.LoadVideosEvent(getArguments().getInt("id")));
         } else if(!trailerList.isEmpty()){
             // this is the case when this movie has videos
             // videos already downloaded
-            Log.d(MovieApplication.TAG, CLASS + "videos already loaded");
+            //Log.d(MovieApplication.TAG, CLASS + "videos already loaded");
             setupTrailersList();
         }
     }
@@ -100,7 +102,7 @@ public class MovieDetailFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(MovieApplication.TAG, CLASS + "onCreateView()");
+        //Log.d(MovieApplication.TAG, CLASS + "onCreateView()");
         View view = inflater.inflate(R.layout.fragment_movie_detail, container, false);
 
         tvTitle = (TextView) view.findViewById(R.id.tvDetailTitle);
@@ -114,6 +116,7 @@ public class MovieDetailFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getBaseContext(),
                 LinearLayoutManager.HORIZONTAL, false);
         rvTrailers.setLayoutManager(layoutManager);
+        rvTrailers.addOnItemTouchListener(new RecyclerItemClickListener(getActivity().getBaseContext(), this));
         llTrailers = (LinearLayout) view.findViewById(R.id.llTrailers);
 
         return view;
@@ -123,15 +126,15 @@ public class MovieDetailFragment extends Fragment {
     public void onStart() {
         super.onStart();
         bus.register(this);
-        Log.d(MovieApplication.TAG, CLASS + "onStart()");
+        //Log.d(MovieApplication.TAG, CLASS + "onStart()");
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.d(MovieApplication.TAG, CLASS + "onSaveInstanceState()");
+        //Log.d(MovieApplication.TAG, CLASS + "onSaveInstanceState()");
         outState.putParcelable(DetailedMovie.class.getSimpleName(), Parcels.wrap(this.detailedMovie));
-        Log.d(MovieApplication.TAG, CLASS + "trailerlist size = " + trailerList.size());
+        //Log.d(MovieApplication.TAG, CLASS + "trailerlist size = " + trailerList.size());
         outState.putParcelable(Trailer.class.getSimpleName(), Parcels.wrap(this.trailerList));
     }
 
@@ -139,13 +142,7 @@ public class MovieDetailFragment extends Fragment {
     public void onStop() {
         super.onStop();
         bus.unregister(this);
-        Log.d(MovieApplication.TAG, CLASS + "onStop()");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(MovieApplication.TAG, CLASS + "onDestroy()");
+        //Log.d(MovieApplication.TAG, CLASS + "onStop()");
     }
 
     @Subscribe
@@ -192,5 +189,10 @@ public class MovieDetailFragment extends Fragment {
             adapter.setData(trailerList);
         }
         llTrailers.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Log.d(MovieApplication.TAG, CLASS + "onItemClick() pos = " + position);
     }
 }
