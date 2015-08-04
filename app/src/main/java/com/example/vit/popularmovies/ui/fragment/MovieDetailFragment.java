@@ -1,6 +1,9 @@
 package com.example.vit.popularmovies.ui.fragment;
 
 import android.app.Fragment;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -193,6 +196,20 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
 
     @Override
     public void onItemClick(View view, int position) {
-        Log.d(MovieApplication.TAG, CLASS + "onItemClick() pos = " + position);
+        //Log.d(MovieApplication.TAG, CLASS + "onItemClick() pos = " + position);
+        if(trailerList.get(position).getSite().toLowerCase().equals("youtube")) {
+            watchYoutubeVideo(trailerList.get(position).getKey());
+        }
+    }
+
+    public void watchYoutubeVideo(String id){
+        try{
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
+            startActivity(intent);
+        }catch (ActivityNotFoundException ex){
+            Intent intent=new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://www.youtube.com/watch?v="+id));
+            startActivity(intent);
+        }
     }
 }
