@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.vit.popularmovies.MovieApplication;
 import com.example.vit.popularmovies.R;
@@ -26,10 +27,12 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.ViewHo
     // Provide a reference to the views for each data item
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView thumbnail;
+        public TextView title;
 
         public ViewHolder(View v) {
             super(v);
             thumbnail = (ImageView) v.findViewById(R.id.ivTrailerThumbnail);
+            title = (TextView) v.findViewById(R.id.tvTrailerTitle);
         }
     }
 
@@ -54,6 +57,8 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.ViewHo
                 .error(R.drawable.placeholder)
                 .placeholder(R.drawable.placeholder)
                 .into(holder.thumbnail);
+        holder.title.setText(trailersList.get(position).getName());
+        //holder.title.setSelected(true);
     }
 
     @Override

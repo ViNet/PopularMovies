@@ -9,7 +9,13 @@ import android.util.AttributeSet;
 import android.view.View;
 
 /**
- * triangle view for
+ * view with triangle inside
+ * 1,2,3 - vertices
+     1
+     *   *
+     *       3
+     *   *
+     2
  */
 public class Triangle extends View {
     Paint paint;
@@ -35,13 +41,6 @@ public class Triangle extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         //calculate vertex coordinates
-        /*
-            1
-            *   *
-            *       3
-            *   *
-            2
-         */
         int x1,y1,x2,y2,x3,y3;
         x1 = getPaddingLeft();
         y1 = getPaddingTop();

@@ -3,6 +3,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:id="@+id/llTrailers"
+    android:paddingBottom="16dp"
     android:visibility="gone">
     <!-- vertical divider -->
     <View
@@ -29,7 +30,6 @@
         android:layout_height="180dp"
         android:background="@color/background_movie_detail"
         android:clickable="true"
-        android:paddingLeft="@dimen/detail_content_padding"
-        android:paddingRight="@dimen/detail_content_padding" />
+         />
 
 </LinearLayout>

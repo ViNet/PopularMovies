@@ -1,5 +1,5 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="240dp"
     android:layout_height="match_parent"
     android:layout_marginStart="1dp"
     android:layout_marginEnd="1dp"
@@ -13,14 +13,6 @@
         android:scaleType="fitCenter"
         />
 
-    <!-- icon play
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:src="@drawable/ic_play"
-            android:background="@color/background_text_videos_preview"/>
--->
     <com.example.vit.popularmovies.ui.Triangle
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -28,16 +20,23 @@
         android:background="@color/background_text_videos_preview"
         android:layout_gravity="center_horizontal|center_vertical"/>
 
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/tvTrailerTitle"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:freezesText="true"
         android:background="@color/background_text_videos_preview"
         android:textColor="@color/text_videos_preview"
-        android:padding="1dp"
+        android:padding="2dp"
         android:textAppearance="?android:textAppearanceSmall"
         android:layout_gravity="bottom"
-        android:text="trailer #1"/>
+        />
 
 
 </FrameLayout>
