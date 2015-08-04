@@ -6,4 +6,7 @@
     <color name="text_primary">#6c6c6c</color>
     <color name="text_secondary">#2f2f2f</color>
 
+    <color name="background_text_videos_preview">#7a494949</color>
+    <color name="text_videos_preview">#fcf8fd</color>
+
 </resources>

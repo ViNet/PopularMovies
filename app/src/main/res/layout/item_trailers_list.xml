@@ -13,5 +13,31 @@
         android:scaleType="fitCenter"
         />
 
+    <!-- icon play
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:src="@drawable/ic_play"
+            android:background="@color/background_text_videos_preview"/>
+-->
+    <com.example.vit.popularmovies.ui.Triangle
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:padding="15dp"
+        android:background="@color/background_text_videos_preview"
+        android:layout_gravity="center_horizontal|center_vertical"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background_text_videos_preview"
+        android:textColor="@color/text_videos_preview"
+        android:padding="1dp"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:layout_gravity="bottom"
+        android:text="trailer #1"/>
+
 
 </FrameLayout>
