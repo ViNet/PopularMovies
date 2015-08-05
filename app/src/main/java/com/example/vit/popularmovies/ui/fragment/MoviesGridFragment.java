@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.vit.popularmovies.MovieApplication;
 import com.example.vit.popularmovies.R;
+import com.example.vit.popularmovies.ui.EndlessRecyclerOnScrollListener;
 import com.example.vit.popularmovies.ui.RecyclerItemClickListener;
 import com.example.vit.popularmovies.communication.BusProvider;
 import com.example.vit.popularmovies.communication.Event;
@@ -26,16 +27,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Vit on 2015-07-07.
+ * Fragment with grid that contains movie posters
  */
-public class MoviesGridFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener {
+
+public class MoviesGridFragment extends Fragment implements
+        RecyclerItemClickListener.OnItemClickListener{
 
     static final String CLASS = MoviesGridFragment.class.getSimpleName() + ": ";
 
     private RecyclerView rvMoviesGrid;
-    private RecyclerView.LayoutManager layoutManager;
+    private GridLayoutManager layoutManager;
     private MoviesAdapter adapter;
-    private List<Movie> moviesList = new ArrayList<Movie>();
+    private List<Movie> moviesList = new ArrayList<>();
     private Bus bus;
 
     @Override
@@ -69,7 +72,12 @@ public class MoviesGridFragment extends Fragment implements RecyclerItemClickLis
         rvMoviesGrid.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity().getBaseContext(), this));
         rvMoviesGrid.setLayoutManager(layoutManager);
-
+        rvMoviesGrid.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int currentPage) {
+                Log.d(MovieApplication.TAG, CLASS + "onLoadMore() page = " + currentPage);
+            }
+        });
         // specify an adapter
         adapter = new MoviesAdapter(getActivity().getBaseContext(), moviesList);
         rvMoviesGrid.setAdapter(adapter);
