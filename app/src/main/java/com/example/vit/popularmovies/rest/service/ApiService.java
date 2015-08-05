@@ -4,10 +4,13 @@ import com.example.vit.popularmovies.rest.model.DetailedMovie;
 import com.example.vit.popularmovies.rest.model.Page;
 import com.example.vit.popularmovies.rest.model.TrailersResult;
 
+import java.util.Map;
+
 import retrofit.Callback;
 import retrofit.http.GET;
 import retrofit.http.Path;
 import retrofit.http.Query;
+import retrofit.http.QueryMap;
 
 
 public interface ApiService {
@@ -15,7 +18,7 @@ public interface ApiService {
     // get list of movie
     // path - /discover/movie?sort_by=popularity.desc
     @GET("/discover/movie")
-    void getMovies(@Query("sort_by") String sortBy, @Query("api_key") String apiKey, Callback<Page> cb);
+    void getMovies( @QueryMap Map<String, String> options, @Query("api_key") String apiKey, Callback<Page> cb);
 
     // get full movie information by it's id
     // path - /movie/{id}

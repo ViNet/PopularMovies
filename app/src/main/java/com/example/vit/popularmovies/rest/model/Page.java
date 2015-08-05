@@ -6,9 +6,6 @@ import org.parceler.Parcel;
 
 import java.util.List;
 
-/**
- * Created by Vit on 26.06.2015.
- */
 @Parcel
 public class Page {
 

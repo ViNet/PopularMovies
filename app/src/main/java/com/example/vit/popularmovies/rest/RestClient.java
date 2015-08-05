@@ -50,7 +50,7 @@ public class RestClient {
 
     @Subscribe
     public void onLoadMoviesEvent(Event.LoadMoviesEvent event){
-        apiService.getMovies(event.getSortBy(), ApiConfig.API_KEY, new Callback<Page>() {
+        apiService.getMovies(event.getOptions(), ApiConfig.API_KEY, new Callback<Page>() {
             @Override
             public void success(Page page, retrofit.client.Response response) {
                 //Log.d(MovieApplication.TAG, CLASS + "success size = " + page.getMovies().size());

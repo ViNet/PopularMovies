@@ -24,7 +24,9 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Fragment with grid that contains movie posters
@@ -50,15 +52,9 @@ public class MoviesGridFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-        SharedPreferences sharedPreferences =
-                PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
-        Log.d(MovieApplication.TAG, CLASS + " settings, order by = "
-                + sharedPreferences.getString(getString(R.string.pref_order_key)
-                , getString(R.string.param_sort_by_popularity_desc)));
-
         bus.register(this);
-        bus.post(new Event.LoadMoviesEvent(sharedPreferences.getString(getString(R.string.pref_order_key)
-                , getString(R.string.param_sort_by_popularity_desc))));
+        //load first page
+        loadMoviesPage(1);
     }
 
     @Nullable
@@ -95,9 +91,20 @@ public class MoviesGridFragment extends Fragment implements
         adapter.setData(event.getMovieList());
     }
 
-
     @Override
     public void onItemClick(View view, int position) {
         bus.post(new Event.ShowMovieDetail(moviesList.get(position)));
+    }
+
+    private void loadMoviesPage(int page){
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
+        // make query options
+        Map<String, String> options = new HashMap<>();
+        options.put(Event.LoadMoviesEvent.SORT_BY, sharedPreferences.getString(getString(R.string.pref_order_key)
+                , getString(R.string.param_sort_by_popularity_desc)));
+        options.put(Event.LoadMoviesEvent.PAGE, String.valueOf(page));
+
+        bus.post(new Event.LoadMoviesEvent(options));
     }
 }

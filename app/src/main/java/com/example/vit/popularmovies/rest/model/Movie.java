@@ -5,9 +5,6 @@ import com.google.gson.annotations.SerializedName;
 import org.parceler.Parcel;
 
 
-/**
- * Created by Vit on 26.06.2015.
- */
 @Parcel
 public class Movie{
 

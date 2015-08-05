@@ -5,6 +5,7 @@ import com.example.vit.popularmovies.rest.model.Movie;
 import com.example.vit.popularmovies.rest.model.Trailer;
 
 import java.util.List;
+import java.util.Map;
 
 public abstract class Event {
 
@@ -17,14 +18,17 @@ public abstract class Event {
     public static class LoadMoviesEvent extends Event {
 
         //Optional parameters
-        private String sortBy;
+        private Map<String, String> options;
+        // Optional parameters keys
+        public static final String SORT_BY = "sort_by";
+        public static final String PAGE = "page";
 
-        public LoadMoviesEvent(String sortBy) {
-            this.sortBy = sortBy;
+        public LoadMoviesEvent(Map<String, String> options) {
+            this.options = options;
         }
 
-        public String getSortBy() {
-            return sortBy;
+        public Map<String, String> getOptions() {
+            return options;
         }
     }
 
