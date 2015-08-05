@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import com.example.vit.popularmovies.R;
 import com.example.vit.popularmovies.communication.BusProvider;
 import com.example.vit.popularmovies.communication.Event;
+import com.example.vit.popularmovies.ui.fragment.MovieDetailFragment;
+import com.example.vit.popularmovies.ui.fragment.MoviesGridFragment;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -28,6 +30,11 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if(getFragmentManager().findFragmentById(R.id.movies_container) == null){
+            getFragmentManager().beginTransaction().
+                    replace(R.id.movies_container, MoviesGridFragment.newInstance()).commit();
+        }
 
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

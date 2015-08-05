@@ -1,5 +1,6 @@
 package com.example.vit.popularmovies.ui.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -44,23 +45,27 @@ public class MoviesGridFragment extends Fragment implements
     private List<Movie> moviesList = new ArrayList<>();
     private Bus bus;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        bus = BusProvider.getInstance();
+    public static MoviesGridFragment newInstance(){
+        return new MoviesGridFragment();
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        bus.register(this);
-        //load first page
-        loadMoviesPage(1);
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        //Log.d(MovieApplication.TAG, CLASS + "onAttach()");
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(MovieApplication.TAG, CLASS + "onCreate()");
+        bus = BusProvider.getInstance();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(MovieApplication.TAG, CLASS + "onCreateView()");
         View view = inflater.inflate(R.layout.fragment_grid_movies, container, false);
 
         rvMoviesGrid = (RecyclerView) view.findViewById(R.id.rvMoviesGrid);
@@ -83,9 +88,60 @@ public class MoviesGridFragment extends Fragment implements
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        //Log.d(MovieApplication.TAG, CLASS + "onActivityCreated()");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //Log.d(MovieApplication.TAG, CLASS + "onStart()");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Log.d(MovieApplication.TAG, CLASS + "onResume()");
+        bus.register(this);
+        //load first page
+        loadMoviesPage(1);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //Log.d(MovieApplication.TAG, CLASS + "onPause()");
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //Log.d(MovieApplication.TAG, CLASS + "onSaveInstanceState()");
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         bus.unregister(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        //Log.d(MovieApplication.TAG, CLASS + "onDestroyView()");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //Log.d(MovieApplication.TAG, CLASS + "onDestroy()");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        //Log.d(MovieApplication.TAG, CLASS + "onDetach()");
     }
 
     @Subscribe
