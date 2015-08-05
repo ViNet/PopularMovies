@@ -54,7 +54,7 @@ public class RestClient {
             @Override
             public void success(Page page, retrofit.client.Response response) {
                 //Log.d(MovieApplication.TAG, CLASS + "success size = " + page.getMovies().size());
-                bus.post(new Event.LoadedMoviesEvent(page.getMovies()));
+                bus.post(new Event.LoadedMoviesEvent(page));
             }
 
             @Override

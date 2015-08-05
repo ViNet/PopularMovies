@@ -37,4 +37,8 @@ public class Page {
     public void setMovies(List<Movie> movies) {
         this.movies = movies;
     }
+
+    public boolean isStartingPage(){
+        return this.pageId == 1;
+    }
 }

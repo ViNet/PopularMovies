@@ -44,15 +44,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.movies_grid_item, parent, false);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+        return new ViewHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         //holder.textView.setText(dataset[position]);
-        Log.d(MovieApplication.TAG, CLASS + "url: " + buildUrl(moviesList.get(position).getPosterPath()));
+        //Log.d(MovieApplication.TAG, CLASS + "url: " + buildUrl(moviesList.get(position).getPosterPath()));
 
         Picasso.with(context).load(buildUrl(moviesList.get(position).getPosterPath()))
                 .error(R.drawable.placeholder)
@@ -67,6 +66,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
     public void setData(List<Movie> data){
         this.moviesList.clear();
+        addData(data);
+    }
+
+    public void addData(List<Movie> data){
         moviesList.addAll(data);
         notifyDataSetChanged();
     }

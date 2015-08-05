@@ -2,6 +2,7 @@ package com.example.vit.popularmovies.communication;
 
 import com.example.vit.popularmovies.rest.model.DetailedMovie;
 import com.example.vit.popularmovies.rest.model.Movie;
+import com.example.vit.popularmovies.rest.model.Page;
 import com.example.vit.popularmovies.rest.model.Trailer;
 
 import java.util.List;
@@ -36,14 +37,14 @@ public abstract class Event {
       Response for request of loading movies list
     */
     public static class LoadedMoviesEvent extends Event {
-        private List<Movie> movieList;
+        private Page page;
 
-        public LoadedMoviesEvent(List<Movie> movieList) {
-            this.movieList = movieList;
+        public LoadedMoviesEvent(Page page) {
+            this.page = page;
         }
 
-        public List<Movie> getMovieList() {
-            return movieList;
+        public Page getPage(){
+            return this.page;
         }
     }
 

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.vit.popularmovies.MovieApplication;
 import com.example.vit.popularmovies.R;
+import com.example.vit.popularmovies.rest.model.Page;
 import com.example.vit.popularmovies.ui.EndlessRecyclerOnScrollListener;
 import com.example.vit.popularmovies.ui.RecyclerItemClickListener;
 import com.example.vit.popularmovies.communication.BusProvider;
@@ -72,6 +73,7 @@ public class MoviesGridFragment extends Fragment implements
             @Override
             public void onLoadMore(int currentPage) {
                 Log.d(MovieApplication.TAG, CLASS + "onLoadMore() page = " + currentPage);
+                loadMoviesPage(currentPage);
             }
         });
         // specify an adapter
@@ -88,7 +90,17 @@ public class MoviesGridFragment extends Fragment implements
 
     @Subscribe
     public void onLoadedMoviesEvent(Event.LoadedMoviesEvent event){
-        adapter.setData(event.getMovieList());
+        Page page = event.getPage();
+        if(page.isStartingPage()){
+            // set new data
+            Log.d(MovieApplication.TAG, CLASS + "set new data");
+            adapter.setData(page.getMovies());
+        } else {
+            // add new data to already existing data
+            Log.d(MovieApplication.TAG, CLASS + "add new data ");
+            adapter.addData(page.getMovies());
+        }
+
     }
 
     @Override
