@@ -25,6 +25,8 @@ import com.example.vit.popularmovies.ui.adapter.MoviesAdapter;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +37,7 @@ import java.util.Map;
  */
 
 public class MoviesGridFragment extends Fragment implements
-        RecyclerItemClickListener.OnItemClickListener{
+        RecyclerItemClickListener.OnItemClickListener, SharedPreferences.OnSharedPreferenceChangeListener{
 
     static final String CLASS = MoviesGridFragment.class.getSimpleName() + ": ";
 
@@ -45,6 +47,11 @@ public class MoviesGridFragment extends Fragment implements
     private List<Movie> moviesList = new ArrayList<>();
     private Bus bus;
 
+    private boolean newQueryOptions = false;    // true, if settings changed
+
+    // keys for bundle
+    static final String KEY_MOVIES_LIST = "moviesList";
+
     public static MoviesGridFragment newInstance(){
         return new MoviesGridFragment();
     }
@@ -52,13 +59,16 @@ public class MoviesGridFragment extends Fragment implements
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        //Log.d(MovieApplication.TAG, CLASS + "onAttach()");
+        Log.d(MovieApplication.TAG, CLASS + "onAttach()");
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(MovieApplication.TAG, CLASS + "onCreate()");
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        settings.registerOnSharedPreferenceChangeListener(this);
+
         bus = BusProvider.getInstance();
     }
 
@@ -74,7 +84,7 @@ public class MoviesGridFragment extends Fragment implements
         rvMoviesGrid.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity().getBaseContext(), this));
         rvMoviesGrid.setLayoutManager(layoutManager);
-        rvMoviesGrid.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
+        rvMoviesGrid.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager, 20) {
             @Override
             public void onLoadMore(int currentPage) {
                 Log.d(MovieApplication.TAG, CLASS + "onLoadMore() page = " + currentPage);
@@ -90,58 +100,74 @@ public class MoviesGridFragment extends Fragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //Log.d(MovieApplication.TAG, CLASS + "onActivityCreated()");
+        Log.d(MovieApplication.TAG, CLASS + "onActivityCreated()");
+
+        // restore previous dataset
+        if(savedInstanceState != null){
+            if(savedInstanceState.containsKey(KEY_MOVIES_LIST)){
+                moviesList = Parcels.unwrap(savedInstanceState.getParcelable(KEY_MOVIES_LIST));
+                adapter.setData(moviesList);
+            }
+        }
+        Log.d(MovieApplication.TAG, CLASS + "movieList size = " + moviesList.size());
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        //Log.d(MovieApplication.TAG, CLASS + "onStart()");
+        bus.register(this);
+        // happens  at first start or when settings was changed
+        if(moviesList.isEmpty() || newQueryOptions){
+            newQueryOptions = false;
+            //load first page
+            loadMoviesPage(1);
+        }
+
+        Log.d(MovieApplication.TAG, CLASS + "onStart()");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //Log.d(MovieApplication.TAG, CLASS + "onResume()");
-        bus.register(this);
-        //load first page
-        loadMoviesPage(1);
+        Log.d(MovieApplication.TAG, CLASS + "onResume()");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        //Log.d(MovieApplication.TAG, CLASS + "onPause()");
+        Log.d(MovieApplication.TAG, CLASS + "onPause()");
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //Log.d(MovieApplication.TAG, CLASS + "onSaveInstanceState()");
+        outState.putParcelable(KEY_MOVIES_LIST, Parcels.wrap(moviesList));
+        Log.d(MovieApplication.TAG, CLASS + "onSaveInstanceState()");
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        Log.d(MovieApplication.TAG, CLASS + "onStop()");
         bus.unregister(this);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        //Log.d(MovieApplication.TAG, CLASS + "onDestroyView()");
+        Log.d(MovieApplication.TAG, CLASS + "onDestroyView()");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //Log.d(MovieApplication.TAG, CLASS + "onDestroy()");
+        Log.d(MovieApplication.TAG, CLASS + "onDestroy()");
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        //Log.d(MovieApplication.TAG, CLASS + "onDetach()");
+        Log.d(MovieApplication.TAG, CLASS + "onDetach()");
     }
 
     @Subscribe
@@ -155,8 +181,9 @@ public class MoviesGridFragment extends Fragment implements
             // add new data to already existing data
             Log.d(MovieApplication.TAG, CLASS + "add new data ");
             adapter.addData(page.getMovies());
+            this.moviesList.addAll(page.getMovies());
         }
-
+        //Log.d(MovieApplication.TAG, CLASS + "movieList size = " + moviesList.size());
     }
 
     @Override
@@ -174,5 +201,12 @@ public class MoviesGridFragment extends Fragment implements
         options.put(Event.LoadMoviesEvent.PAGE, String.valueOf(page));
 
         bus.post(new Event.LoadMoviesEvent(options));
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Log.d(MovieApplication.TAG, CLASS + "onSharedPreferenceChanged()");
+        newQueryOptions = true;
+
     }
 }

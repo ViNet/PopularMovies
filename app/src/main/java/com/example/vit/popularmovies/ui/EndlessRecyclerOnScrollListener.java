@@ -14,10 +14,12 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     private int previousTotal = 0; // The total number of items in the dataset after the last load
     private boolean loading = true; // True if we are still waiting for the last set of data to load.
     private int currentPage = 1;
+    private int itemsInPage = 1;    // number of items in 1 page
     private GridLayoutManager layoutManager;
 
-    public EndlessRecyclerOnScrollListener(GridLayoutManager layoutManager) {
+    public EndlessRecyclerOnScrollListener(GridLayoutManager layoutManager, int itemsInPage) {
         this.layoutManager = layoutManager;
+        this.itemsInPage = itemsInPage;
     }
 
     @Override
@@ -37,8 +39,9 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
             // end of list reached
             if ( lastCompletelyVisible >= (totalItemCount - 1)) {
                 loading = true;
-                currentPage++;
-                onLoadMore(currentPage);
+                currentPage = totalItemCount / itemsInPage;
+                // load next page
+                onLoadMore(currentPage + 1);
             }
         }
     }
