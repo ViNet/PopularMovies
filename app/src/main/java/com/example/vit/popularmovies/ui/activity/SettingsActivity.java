@@ -18,11 +18,23 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pref_with_toolbar);
-
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        initToolbar();
 
         getFragmentManager().beginTransaction().replace(R.id.content_frame, new MyPreferenceFragment()).commit();
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+
+        }
     }
 
     public static class MyPreferenceFragment extends PreferenceFragment

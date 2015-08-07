@@ -9,7 +9,8 @@
         android:id="@+id/toolbar"
         android:layout_height="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:background="?attr/colorPrimary" />
+        android:background="?attr/colorPrimary"
+        app:navigationIcon="@drawable/abc_ic_ab_back_mtrl_am_alpha"/>
 
     <FrameLayout
         android:id="@+id/content_frame"
