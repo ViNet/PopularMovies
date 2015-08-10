@@ -47,8 +47,6 @@ public class MoviesGridFragment extends Fragment implements
     private List<Movie> moviesList = new ArrayList<>();
     private Bus bus;
 
-    private boolean newQueryOptions = false;    // true, if settings changed
-
     // keys for bundle
     static final String KEY_MOVIES_LIST = "moviesList";
 
@@ -59,13 +57,13 @@ public class MoviesGridFragment extends Fragment implements
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Log.d(MovieApplication.TAG, CLASS + "onAttach()");
+        //Log.d(MovieApplication.TAG, CLASS + "onAttach()");
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(MovieApplication.TAG, CLASS + "onCreate()");
+       // Log.d(MovieApplication.TAG, CLASS + "onCreate()");
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         settings.registerOnSharedPreferenceChangeListener(this);
 
@@ -75,7 +73,7 @@ public class MoviesGridFragment extends Fragment implements
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(MovieApplication.TAG, CLASS + "onCreateView()");
+       // Log.d(MovieApplication.TAG, CLASS + "onCreateView()");
         View view = inflater.inflate(R.layout.fragment_grid_movies, container, false);
 
         rvMoviesGrid = (RecyclerView) view.findViewById(R.id.rvMoviesGrid);
@@ -87,7 +85,7 @@ public class MoviesGridFragment extends Fragment implements
         rvMoviesGrid.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager, 20) {
             @Override
             public void onLoadMore(int currentPage) {
-                Log.d(MovieApplication.TAG, CLASS + "onLoadMore() page = " + currentPage);
+                //Log.d(MovieApplication.TAG, CLASS + "onLoadMore() page = " + currentPage);
                 loadMoviesPage(currentPage);
             }
         });
@@ -100,7 +98,7 @@ public class MoviesGridFragment extends Fragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d(MovieApplication.TAG, CLASS + "onActivityCreated()");
+       // Log.d(MovieApplication.TAG, CLASS + "onActivityCreated()");
 
         // restore previous dataset
         if(savedInstanceState != null){
@@ -109,7 +107,7 @@ public class MoviesGridFragment extends Fragment implements
                 adapter.setData(moviesList);
             }
         }
-        Log.d(MovieApplication.TAG, CLASS + "movieList size = " + moviesList.size());
+       // Log.d(MovieApplication.TAG, CLASS + "movieList size = " + moviesList.size());
     }
 
     @Override
@@ -117,57 +115,56 @@ public class MoviesGridFragment extends Fragment implements
         super.onStart();
         bus.register(this);
         // happens  at first start or when settings was changed
-        if(moviesList.isEmpty() || newQueryOptions){
-            newQueryOptions = false;
+        if(moviesList.isEmpty()){
             //load first page
             loadMoviesPage(1);
         }
 
-        Log.d(MovieApplication.TAG, CLASS + "onStart()");
+       // Log.d(MovieApplication.TAG, CLASS + "onStart()");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(MovieApplication.TAG, CLASS + "onResume()");
+        //Log.d(MovieApplication.TAG, CLASS + "onResume()");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(MovieApplication.TAG, CLASS + "onPause()");
+        //Log.d(MovieApplication.TAG, CLASS + "onPause()");
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(KEY_MOVIES_LIST, Parcels.wrap(moviesList));
-        Log.d(MovieApplication.TAG, CLASS + "onSaveInstanceState()");
+        //Log.d(MovieApplication.TAG, CLASS + "onSaveInstanceState()");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(MovieApplication.TAG, CLASS + "onStop()");
+       // Log.d(MovieApplication.TAG, CLASS + "onStop()");
         bus.unregister(this);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.d(MovieApplication.TAG, CLASS + "onDestroyView()");
+        //Log.d(MovieApplication.TAG, CLASS + "onDestroyView()");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(MovieApplication.TAG, CLASS + "onDestroy()");
+        //Log.d(MovieApplication.TAG, CLASS + "onDestroy()");
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.d(MovieApplication.TAG, CLASS + "onDetach()");
+        //Log.d(MovieApplication.TAG, CLASS + "onDetach()");
     }
 
     @Subscribe
@@ -175,11 +172,11 @@ public class MoviesGridFragment extends Fragment implements
         Page page = event.getPage();
         if(page.isStartingPage()){
             // set new data
-            Log.d(MovieApplication.TAG, CLASS + "set new data");
+            //Log.d(MovieApplication.TAG, CLASS + "set new data");
             adapter.setData(page.getMovies());
         } else {
             // add new data to already existing data
-            Log.d(MovieApplication.TAG, CLASS + "add new data ");
+           // Log.d(MovieApplication.TAG, CLASS + "add new data ");
             adapter.addData(page.getMovies());
             this.moviesList.addAll(page.getMovies());
         }
@@ -205,8 +202,8 @@ public class MoviesGridFragment extends Fragment implements
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Log.d(MovieApplication.TAG, CLASS + "onSharedPreferenceChanged()");
-        newQueryOptions = true;
+        //Log.d(MovieApplication.TAG, CLASS + "onSharedPreferenceChanged()");
+        this.moviesList.clear();
 
     }
 }
