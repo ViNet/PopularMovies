@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.example.vit.popularmovies.MovieApplication;
 import com.example.vit.popularmovies.R;
@@ -42,6 +43,7 @@ public class MoviesGridFragment extends Fragment implements
     static final String CLASS = MoviesGridFragment.class.getSimpleName() + ": ";
 
     private RecyclerView rvMoviesGrid;
+    private ProgressBar pbLoading;
     private GridLayoutManager layoutManager;
     private MoviesAdapter adapter;
     private List<Movie> moviesList = new ArrayList<>();
@@ -75,6 +77,8 @@ public class MoviesGridFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
        // Log.d(MovieApplication.TAG, CLASS + "onCreateView()");
         View view = inflater.inflate(R.layout.fragment_grid_movies, container, false);
+
+        pbLoading = (ProgressBar) view.findViewById(R.id.pbLoading);
 
         rvMoviesGrid = (RecyclerView) view.findViewById(R.id.rvMoviesGrid);
         // use a grid layout manager
@@ -116,8 +120,11 @@ public class MoviesGridFragment extends Fragment implements
         bus.register(this);
         // happens  at first start or when settings was changed
         if(moviesList.isEmpty()){
+            setMovieListVisible(false);
             //load first page
             loadMoviesPage(1);
+        } else {
+            setMovieListVisible(true);
         }
 
        // Log.d(MovieApplication.TAG, CLASS + "onStart()");
@@ -174,6 +181,7 @@ public class MoviesGridFragment extends Fragment implements
             // set new data
             //Log.d(MovieApplication.TAG, CLASS + "set new data");
             adapter.setData(page.getMovies());
+            setMovieListVisible(true);
         } else {
             // add new data to already existing data
            // Log.d(MovieApplication.TAG, CLASS + "add new data ");
@@ -188,6 +196,13 @@ public class MoviesGridFragment extends Fragment implements
         bus.post(new Event.ShowMovieDetail(moviesList.get(position)));
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        //Log.d(MovieApplication.TAG, CLASS + "onSharedPreferenceChanged()");
+        this.moviesList.clear();
+
+    }
+
     private void loadMoviesPage(int page){
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
@@ -200,10 +215,15 @@ public class MoviesGridFragment extends Fragment implements
         bus.post(new Event.LoadMoviesEvent(options));
     }
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        //Log.d(MovieApplication.TAG, CLASS + "onSharedPreferenceChanged()");
-        this.moviesList.clear();
-
+    private void setMovieListVisible(boolean value){
+        if(value){
+            pbLoading.setVisibility(View.GONE);
+            rvMoviesGrid.setVisibility(View.VISIBLE);
+        } else {
+            pbLoading.setVisibility(View.VISIBLE);
+            rvMoviesGrid.setVisibility(View.GONE);
+        }
     }
+
+
 }
