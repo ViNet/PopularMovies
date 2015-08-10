@@ -8,15 +8,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.example.vit.popularmovies.MovieApplication;
 import com.example.vit.popularmovies.R;
 import com.example.vit.popularmovies.communication.BusProvider;
 import com.example.vit.popularmovies.communication.Event;
-import com.example.vit.popularmovies.ui.fragment.MovieDetailFragment;
 import com.example.vit.popularmovies.ui.fragment.MoviesGridFragment;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
-import org.parceler.Parcels;
 
 
 public class MainActivity extends AppCompatActivity{
@@ -25,11 +23,12 @@ public class MainActivity extends AppCompatActivity{
     static final String CLASS = MainActivity.class.getSimpleName() + ": ";
 
     private Bus bus;
+    private boolean hasTwoPanes = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_layout);
 
         if(getFragmentManager().findFragmentById(R.id.movies_container) == null){
             getFragmentManager().beginTransaction().
@@ -40,6 +39,8 @@ public class MainActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
 
         bus = BusProvider.getInstance();
+        hasTwoPanes = getResources().getBoolean(R.bool.has_two_panes);
+        Log.d(MovieApplication.TAG, CLASS + "has two panes - " + hasTwoPanes);
     }
 
     @Override
