@@ -1,107 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_movie_detail">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tvDetailTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/background_movie_title"
-            android:includeFontPadding="false"
-            android:paddingBottom="@dimen/detail_title_vertical_padding"
-            android:paddingLeft="@dimen/detail_title_left_padding"
-            android:paddingTop="@dimen/detail_title_vertical_padding"
-            android:singleLine="true"
-            android:textColor="@color/text_movie_title"
-            android:textSize="36sp" />
-
-        <!-- SHADOW -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:background="@drawable/shadow_shape" />
+        android:layout_height="wrap_content">
 
         <LinearLayout
+            android:id="@+id/llContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/detail_content_padding"
-            android:paddingRight="@dimen/detail_content_padding"
-            android:paddingTop="@dimen/detail_content_padding">
+            android:orientation="vertical">
 
-            <FrameLayout
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/tvDetailTitle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingRight="@dimen/detail_content_padding">
+                android:background="@color/background_movie_title"
+                android:includeFontPadding="false"
+                android:paddingBottom="@dimen/detail_title_vertical_padding"
+                android:paddingLeft="@dimen/detail_title_left_padding"
+                android:paddingTop="@dimen/detail_title_vertical_padding"
+                android:singleLine="true"
+                android:textColor="@color/text_movie_title"
+                android:textSize="36sp" />
 
-                <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/ivDetailPoster"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter" />
-
-            </FrameLayout>
+            <!-- SHADOW -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@drawable/shadow_shape" />
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/detail_content_padding"
+                android:paddingRight="@dimen/detail_content_padding"
+                android:paddingTop="@dimen/detail_content_padding">
 
-                <TextView
-                    android:id="@+id/tvDetailYear"
-                    android:layout_width="match_parent"
+                <FrameLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/text_primary"
-                    android:textSize="26sp" />
+                    android:layout_weight="1"
+                    android:paddingRight="@dimen/detail_content_padding">
 
-                <TextView
-                    android:id="@+id/tvDetailRuntime"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:includeFontPadding="false"
-                    android:textColor="@color/text_primary"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/ivDetailPoster"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter" />
 
-                <TextView
-                    android:id="@+id/tvDetailRating"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp" />
+                </FrameLayout>
 
-                <Button
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="mark as favorite" />
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvDetailYear"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_primary"
+                        android:textSize="26sp" />
+
+                    <TextView
+                        android:id="@+id/tvDetailRuntime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:textColor="@color/text_primary"
+                        android:textSize="20sp"
+                        android:textStyle="italic" />
+
+                    <TextView
+                        android:id="@+id/tvDetailRating"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="mark as favorite" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/tvDetailOverview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/detail_content_padding"
+                android:paddingRight="@dimen/detail_content_padding"
+                android:paddingTop="@dimen/detail_content_padding"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp" />
+
+            <!-- TRAILERS LAYOUT -->
+            <include layout="@layout/list_videos" />
+
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvDetailOverview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/detail_content_padding"
-            android:paddingRight="@dimen/detail_content_padding"
-            android:paddingTop="@dimen/detail_content_padding"
-            android:textColor="@color/text_primary"
-            android:textSize="14sp" />
+        <ProgressBar
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:id="@+id/pbLoading"
+            />
 
-        <!-- TRAILERS LAYOUT -->
-        <include layout="@layout/list_videos"/>
-
-    </LinearLayout>
+    </RelativeLayout>
 
 </ScrollView>

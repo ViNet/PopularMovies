@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.vit.popularmovies.MovieApplication;
@@ -48,6 +49,8 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
     ImageView ivPoster;
     RecyclerView rvTrailers;
     LinearLayout llTrailers;
+    LinearLayout llContent;
+    ProgressBar pbLoading;
 
     TrailersAdapter adapter;
 
@@ -80,26 +83,23 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
         super.onActivityCreated(savedInstanceState);
         //Log.d(MovieApplication.TAG, CLASS + "onActivityCreated()");
 
-        // if detailedMovie is null than loading data
-        if (this.detailedMovie == null) {
+        //this is the case when  data are not yet loaded any time
+        if (this.detailedMovie == null && trailerList == null) {
+            hideContent();
             bus.post(new Event.LoadDetailedMovieEvent(getArguments().getInt("id")));
+            bus.post(new Event.LoadVideosEvent(getArguments().getInt("id")));
         }
         // if detailedMovie is not null than orientation was changed and we'll not load data again
         else {
+            showContent();
             setData();
+            if(!trailerList.isEmpty()) {
+                setupTrailersList();
+            }
         }
 
-        if(trailerList == null){
-            //this is the case when  data are not yet loaded any time
-            // try to load videos for this movie
-            //Log.d(MovieApplication.TAG, CLASS + "load videos for a first time");
-            bus.post(new Event.LoadVideosEvent(getArguments().getInt("id")));
-        } else if(!trailerList.isEmpty()){
-            // this is the case when this movie has videos
-            // videos already downloaded
-            //Log.d(MovieApplication.TAG, CLASS + "videos already loaded");
-            setupTrailersList();
-        }
+
+
     }
 
     @Nullable
@@ -121,6 +121,8 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
         rvTrailers.setLayoutManager(layoutManager);
         rvTrailers.addOnItemTouchListener(new RecyclerItemClickListener(getActivity().getBaseContext(), this));
         llTrailers = (LinearLayout) view.findViewById(R.id.llTrailers);
+        llContent = (LinearLayout) view.findViewById(R.id.llContent);
+        pbLoading = (ProgressBar) view.findViewById(R.id.pbLoading);
 
         return view;
     }
@@ -151,21 +153,26 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
     @Subscribe
     public void onLoadedDetailedMovieEvent(Event.LoadedDetailedMovieEvent event) {
         this.detailedMovie = event.getDetailedMovie();
-        //Log.d(MovieApplication.TAG, CLASS + "video: " + detailedMovie.getVideo());
+        Log.d(MovieApplication.TAG, CLASS + "onLoadedDetailedMovieEvent()");
         setData();
     }
 
     @Subscribe
     public void onLoadedVideosEvent(Event.LoadedVideosEvent event) {
+        Log.d(MovieApplication.TAG, CLASS + "onLoadedVideosEvent()");
         this.trailerList = event.getTrailerList();
         if (!trailerList.isEmpty()) {
             setupTrailersList();
         }
+        showContent();
     }
 
-    public String buildUrl(String posterPath) {
-        final String size = "w185";
-        return "http://image.tmdb.org/t/p/" + size + "/" + posterPath;
+    @Override
+    public void onItemClick(View view, int position) {
+        //Log.d(MovieApplication.TAG, CLASS + "onItemClick() pos = " + position);
+        if(trailerList.get(position).getSite().toLowerCase().equals("youtube")) {
+            watchYoutubeVideo(trailerList.get(position).getKey());
+        }
     }
 
     private void setData() {
@@ -183,23 +190,9 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
                 .into(ivPoster);
     }
 
-
-    private void setupTrailersList(){
-        if(adapter == null){
-            adapter = new TrailersAdapter(getActivity().getBaseContext(), trailerList);
-            rvTrailers.setAdapter(adapter);
-        } else {
-            adapter.setData(trailerList);
-        }
-        llTrailers.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onItemClick(View view, int position) {
-        //Log.d(MovieApplication.TAG, CLASS + "onItemClick() pos = " + position);
-        if(trailerList.get(position).getSite().toLowerCase().equals("youtube")) {
-            watchYoutubeVideo(trailerList.get(position).getKey());
-        }
+    public String buildUrl(String posterPath) {
+        final String size = "w185";
+        return "http://image.tmdb.org/t/p/" + size + "/" + posterPath;
     }
 
     public void watchYoutubeVideo(String id){
@@ -211,5 +204,30 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
                     Uri.parse("http://www.youtube.com/watch?v="+id));
             startActivity(intent);
         }
+    }
+
+    private void setupTrailersList(){
+        if(adapter == null){
+            adapter = new TrailersAdapter(getActivity().getBaseContext(), trailerList);
+            rvTrailers.setAdapter(adapter);
+        } else {
+            adapter.setData(trailerList);
+        }
+        llTrailers.setVisibility(View.VISIBLE);
+    }
+
+    private boolean isAllDataLoaded(){
+        return (detailedMovie != null) && (trailerList != null);
+    }
+
+    private void showContent(){
+        llContent.setVisibility(View.VISIBLE);
+        pbLoading.setVisibility(View.GONE);
+
+    }
+
+    private void hideContent(){
+        llContent.setVisibility(View.GONE);
+        pbLoading.setVisibility(View.VISIBLE);
     }
 }
