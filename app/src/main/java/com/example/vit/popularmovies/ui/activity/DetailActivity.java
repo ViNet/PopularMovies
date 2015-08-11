@@ -23,6 +23,12 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        if(getResources().getBoolean(R.bool.has_two_panes)){
+            // close details activity if there are must be 2 panes layout
+            finish();
+            return;
+        }
+
         if(getFragmentManager().findFragmentById(R.id.detail_container) == null){
             getFragmentManager().beginTransaction().
                     replace(R.id.detail_container, MovieDetailFragment.newInstance(getIntent().getIntExtra("id", 0))).commit();
