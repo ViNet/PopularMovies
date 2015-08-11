@@ -21,6 +21,7 @@ public class Movie{
     @SerializedName("vote_count")
     Integer voteCount;
 
+    public static final int INVALID_MOVIE_ID = -1;
 
     public Movie() {
     }

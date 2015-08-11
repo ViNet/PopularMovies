@@ -180,8 +180,11 @@ public class MoviesGridFragment extends Fragment implements
         if(page.isStartingPage()){
             // set new data
             //Log.d(MovieApplication.TAG, CLASS + "set new data");
-            adapter.setData(page.getMovies());
+            this.moviesList = page.getMovies();
+            adapter.setData(moviesList);
             setMovieListVisible(true);
+            // report main activity that data has been loaded
+            bus.post(new Event.MoviesFragmentReady());
         } else {
             // add new data to already existing data
            // Log.d(MovieApplication.TAG, CLASS + "add new data ");
@@ -193,7 +196,7 @@ public class MoviesGridFragment extends Fragment implements
 
     @Override
     public void onItemClick(View view, int position) {
-        bus.post(new Event.ShowMovieDetail(moviesList.get(position)));
+        bus.post(new Event.ShowMovieDetail(position));
     }
 
     @Override
@@ -225,5 +228,18 @@ public class MoviesGridFragment extends Fragment implements
         }
     }
 
+    public int getMovieIdByPosition(int position){
+        Movie m = moviesList.get(position);
+        if(moviesList != null){
+            return m.getId();
+        }
+        else return Movie.INVALID_MOVIE_ID;
+    }
+
+    public void smoothScrollToPosition(int position){
+        if(rvMoviesGrid != null){
+            rvMoviesGrid.smoothScrollToPosition(position);
+        }
+    }
 
 }

@@ -112,14 +112,23 @@ public abstract class Event {
         (Main list of films) OnItemClick event
     */
     public static class ShowMovieDetail extends Event {
-        private com.example.vit.popularmovies.rest.model.Movie movie;
+        private int moviePosition;
 
-        public ShowMovieDetail(Movie movie) {
-            this.movie = movie;
+        public ShowMovieDetail(int moviePosition) {
+            this.moviePosition = moviePosition;
         }
 
-        public Movie getMovie() {
-            return this.movie;
+        public int getMoviePosition() {
+            return this.moviePosition;
         }
     }
+
+        /*
+        (Main list of films) all data downloaded event
+    */
+    public static class MoviesFragmentReady extends Event {
+            public MoviesFragmentReady(){
+            }
+        }
+
 }
