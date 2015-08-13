@@ -176,6 +176,7 @@ public class MoviesGridFragment extends Fragment implements
 
     @Subscribe
     public void onLoadedMoviesEvent(Event.LoadedMoviesEvent event){
+        /*
         Page page = event.getPage();
         if(page.isStartingPage()){
             // set new data
@@ -192,6 +193,7 @@ public class MoviesGridFragment extends Fragment implements
             this.moviesList.addAll(page.getMovies());
         }
         //Log.d(MovieApplication.TAG, CLASS + "movieList size = " + moviesList.size());
+        */
     }
 
     @Override

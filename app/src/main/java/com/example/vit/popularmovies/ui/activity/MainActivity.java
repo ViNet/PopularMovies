@@ -2,6 +2,7 @@ package com.example.vit.popularmovies.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -10,10 +11,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.example.vit.popularmovies.DataController;
 import com.example.vit.popularmovies.MovieApplication;
 import com.example.vit.popularmovies.R;
 import com.example.vit.popularmovies.communication.BusProvider;
 import com.example.vit.popularmovies.communication.Event;
+import com.example.vit.popularmovies.communication.NetEvents;
 import com.example.vit.popularmovies.rest.model.Movie;
 import com.example.vit.popularmovies.ui.fragment.MovieDetailFragment;
 import com.example.vit.popularmovies.ui.fragment.MoviesGridFragment;
@@ -36,7 +39,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
-
+/*
         moviesFragment = (MoviesGridFragment)
                 getFragmentManager().findFragmentById(R.id.movies_container);
         if(moviesFragment == null){
@@ -44,9 +47,11 @@ public class MainActivity extends AppCompatActivity{
             getFragmentManager().beginTransaction().
                     replace(R.id.movies_container, moviesFragment).commit();
         }
-
+*/
         initToolbar();
 
+
+/*
         bus = BusProvider.getInstance();
 
         hasTwoPanes = getResources().getBoolean(R.bool.has_two_panes);
@@ -54,20 +59,21 @@ public class MainActivity extends AppCompatActivity{
             selectedMovieId = savedInstanceState.getInt("selectedMovieId", Movie.INVALID_MOVIE_ID);
             selectedMoviePosition = savedInstanceState.getInt("selectedMoviePosition", RecyclerView.NO_POSITION);
         }
-
-        //Log.d(MovieApplication.TAG, CLASS + "has two panes - " + hasTwoPanes);
-        //Log.d(MovieApplication.TAG, CLASS + "selected movie id - " + selectedMovieId);
-        //Log.d(MovieApplication.TAG, CLASS + "selected movie pos - " + selectedMoviePosition);
+*/
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        BusProvider.getInstance().register(this);
+        DataController.getInstance().loadMovies();
+        /*
         bus.register(this);
 
         if(selectedMoviePosition != RecyclerView.NO_POSITION){
             moviesFragment.smoothScrollToPosition(selectedMoviePosition);
         }
+        */
     }
 
     @Override
@@ -91,18 +97,22 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        /*
         outState.putInt("selectedMovieId", selectedMovieId);
         outState.putInt("selectedMoviePosition", selectedMoviePosition);
+        */
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        bus.unregister(this);
+       // bus.unregister(this);
+        BusProvider.getInstance().unregister(this);
     }
 
     @Subscribe
     public void onShowMovieDetailEvent(Event.ShowMovieDetail event){
+        /*
         int moviePosition = event.getMoviePosition();
         int movieId = moviesFragment.getMovieIdByPosition(moviePosition);
         if(movieId != selectedMovieId || !hasTwoPanes){
@@ -110,10 +120,12 @@ public class MainActivity extends AppCompatActivity{
             selectedMovieId = movieId;
             selectedMoviePosition = moviePosition;
         }
+        */
     }
 
     @Subscribe
     public void onMoviesFragmentReady(Event.MoviesFragmentReady event){
+        /*
         if(hasTwoPanes && selectedMovieId == Movie.INVALID_MOVIE_ID){
             // if there are no selected movie, show first item in list
             int movieId = moviesFragment.getMovieIdByPosition(0);
@@ -123,9 +135,11 @@ public class MainActivity extends AppCompatActivity{
                 selectedMoviePosition = 0;
             }
         }
+        */
     }
 
     private void showDetails(int movieId){
+        /*
         if(hasTwoPanes){
             //show details in fragment
             getFragmentManager().beginTransaction().
@@ -136,6 +150,7 @@ public class MainActivity extends AppCompatActivity{
             intent.putExtra("id", movieId );
             startActivity(intent);
         }
+        */
     }
 
     private void initToolbar(){
@@ -145,4 +160,8 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    @Subscribe
+    public void onReceiveEvent(NetEvents event){
+        Log.d(MovieApplication.TAG, CLASS + "onReceiverEvent() event - " + event);
+    }
 }
