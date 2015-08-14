@@ -13,6 +13,7 @@ import com.example.vit.popularmovies.R;
 import com.example.vit.popularmovies.rest.model.Movie;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -33,9 +34,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         }
     }
 
-    public MoviesAdapter(Context context, List<Movie> data) {
+    public MoviesAdapter(Context context) {
         this.context = context;
-        this.moviesList = data;
+        this.moviesList = new ArrayList<>();
     }
 
     // Create new views (invoked by the layout manager)

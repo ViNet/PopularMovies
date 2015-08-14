@@ -60,4 +60,8 @@ public class DataController {
         }
         EventMessenger.sendEvent(NetEvents.ON_DATA_AVAILABLE);
     }
+
+    public List<Movie> getMovies(){
+        return this.movies;
+    }
 }
