@@ -2,6 +2,7 @@ package com.example.vit.popularmovies.ui.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.vit.popularmovies.DataController;
+import com.example.vit.popularmovies.ExtraName;
 import com.example.vit.popularmovies.MovieApplication;
 import com.example.vit.popularmovies.R;
 import com.example.vit.popularmovies.communication.BusProvider;
@@ -25,6 +27,7 @@ import com.example.vit.popularmovies.communication.NetEvents;
 import com.example.vit.popularmovies.rest.model.Movie;
 import com.example.vit.popularmovies.ui.EndlessRecyclerOnScrollListener;
 import com.example.vit.popularmovies.ui.RecyclerItemClickListener;
+import com.example.vit.popularmovies.ui.activity.DetailActivity;
 import com.example.vit.popularmovies.ui.adapter.MoviesAdapter;
 import com.squareup.otto.Subscribe;
 
@@ -47,6 +50,9 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
     private ProgressBar pbLoading;
     private MoviesAdapter adapter;
     EndlessRecyclerOnScrollListener scrollListener;
+
+    // extras names
+    public final static String EXTRA_MOVIE_ID = "movieId";
 
     private View view;
 
@@ -201,6 +207,10 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
     @Override
     public void onItemClick(View view, int position) {
         //Log.d(MovieApplication.TAG, CLASS + "on click pos = " + position);
+        int movieId = adapter.getItemAtPosition(position).getId();
+        Intent detailedActivityIntent = new Intent(getActivity(), DetailActivity.class);
+        detailedActivityIntent.putExtra(ExtraName.MOVIE_ID, movieId);
+        startActivity(detailedActivityIntent);
     }
 
     /*

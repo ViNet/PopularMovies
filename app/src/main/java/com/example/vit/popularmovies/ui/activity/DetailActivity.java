@@ -8,33 +8,36 @@ import android.view.View;
 
 import org.parceler.Parcels;
 
+import com.example.vit.popularmovies.ExtraName;
 import com.example.vit.popularmovies.MovieApplication;
 import com.example.vit.popularmovies.R;
 import com.example.vit.popularmovies.rest.model.Movie;
 import com.example.vit.popularmovies.ui.fragment.MovieDetailFragment;
+import com.example.vit.popularmovies.ui.fragment.MoviesFragment;
 
 
 public class DetailActivity extends AppCompatActivity {
 
     static final String CLASS = DetailActivity.class.getSimpleName() + ":";
+    MovieDetailFragment movieDetailFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-
-        if(getResources().getBoolean(R.bool.has_two_panes)){
-            // close details activity if there are must be 2 panes layout
-            finish();
-            return;
-        }
-
-        if(getFragmentManager().findFragmentById(R.id.detail_container) == null){
-            getFragmentManager().beginTransaction().
-                    replace(R.id.detail_container, MovieDetailFragment.newInstance(getIntent().getIntExtra("id", 0))).commit();
-        }
-
         initToolbar();
+        startFragment();
+    }
+
+    private void startFragment(){
+        movieDetailFragment = (MovieDetailFragment)
+                getFragmentManager().findFragmentById(R.id.detail_container);
+        if(movieDetailFragment == null){
+            movieDetailFragment =
+                    MovieDetailFragment.newInstance();
+            getFragmentManager().beginTransaction().
+                    replace(R.id.detail_container, movieDetailFragment).commit();
+        }
     }
 
     private void initToolbar() {

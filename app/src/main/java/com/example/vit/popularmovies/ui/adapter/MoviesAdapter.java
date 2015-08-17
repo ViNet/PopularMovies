@@ -75,6 +75,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
+    public Movie getItemAtPosition(int position){
+        return this.moviesList.get(position);
+    }
+
     public String buildUrl(String posterPath) {
         final String size = "w185";
         return "http://image.tmdb.org/t/p/" + size + "/" + posterPath;
