@@ -45,6 +45,11 @@
     <string name="param_sort_by_revenue_desc" translatable="false">revenue.desc</string>
 
 
+    <!-- Main activity/fragment -->
+    <string name="no_network_connection">There\'s no network connection right now. Try again later.</string>
+    <string name="retry">Retry</string>
+
+
     <!-- Detail activity/fragment -->
     <string name="title_detail_activity">Movie Detail</string>
     <string name="runtime">

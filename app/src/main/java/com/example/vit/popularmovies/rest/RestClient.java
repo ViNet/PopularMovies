@@ -61,20 +61,22 @@ public class RestClient {
     }
 
     public void loadMovies(Map<String, String> options){
-        Log.d(MovieApplication.TAG, CLASS + NetworkUtil.getConnectivityStatusString(MovieApplication.getContext()));
-        Log.d(MovieApplication.TAG, CLASS + NetworkUtil.getConnectivityStatus(MovieApplication.getContext()));
-        apiService.getMovies(options, ApiConfig.API_KEY, new Callback<Page>() {
-            @Override
-            public void success(Page page, Response response) {
-                Log.d(MovieApplication.TAG, CLASS + "loadMovies.success()");
-                DataController.getInstance().onLoadedMovies(page);
-            }
+        if(NetworkUtil.getConnectivityStatus(MovieApplication.getContext()) != NetworkUtil.TYPE_NOT_CONNECTED) {
+            apiService.getMovies(options, ApiConfig.API_KEY, new Callback<Page>() {
+                @Override
+                public void success(Page page, Response response) {
+                    Log.d(MovieApplication.TAG, CLASS + "loadMovies.success()");
+                    DataController.getInstance().onLoadedMovies(page);
+                }
 
-            @Override
-            public void failure(RetrofitError error) {
-                Log.d(MovieApplication.TAG, CLASS + "loadMovies.failure() error - " + error.toString());
-            }
-        });
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.d(MovieApplication.TAG, CLASS + "loadMovies.failure() error - " + error.toString());
+                }
+            });
+        } else {
+            DataController.getInstance().onNoInternet();
+        }
     }
 
 }

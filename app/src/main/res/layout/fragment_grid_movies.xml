@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
+        android:visibility="gone"
         />
 
     <ProgressBar
@@ -17,5 +18,7 @@
         android:layout_centerInParent="true"
         android:id="@+id/pbLoading"
         />
+
+    <include layout="@layout/view_no_internet" />
 
 </RelativeLayout>

@@ -1,5 +1,6 @@
 package com.example.vit.popularmovies.ui.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -10,8 +11,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.example.vit.popularmovies.DataController;
 import com.example.vit.popularmovies.MovieApplication;
@@ -29,7 +33,8 @@ import java.util.List;
 /**
  * Fragment with grid that contains movie posters
  */
-public class MoviesFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener {
+public class MoviesFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener
+        , EndlessRecyclerOnScrollListener.OnLoadMoreListener{
 
     private final static String CLASS = MoviesFragment.class.getSimpleName() + ": ";
 
@@ -37,9 +42,11 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
 
     private RecyclerView recyclerView;
     private GridLayoutManager layoutManager;
-    private LinearLayout llContent;
+    private RelativeLayout noInternetView;
+    private Button btnRetry;
     private ProgressBar pbLoading;
     private MoviesAdapter adapter;
+    EndlessRecyclerOnScrollListener scrollListener;
 
     private View view;
 
@@ -61,11 +68,19 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
                 } else {
                     adapter.setData(movies);
                     // hide loading animation
-                    hideLoadingView();
+                    showContentView();
                 }
                 break;
             case ON_LOAD_MORE_DATA_AVAILABLE:
                 adapter.addData(DataController.getInstance().getNextMovies());
+                break;
+            case NO_INTERNET:
+                if(adapter.getItemCount() == 0){
+                    showNoInternetView();
+                } else {
+                    showNoInternetToast();
+                    scrollListener.setIsLoadingNow(false);
+                }
                 break;
         }
     }
@@ -105,23 +120,28 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
     private void initViews() {
         //Log.d(MovieApplication.TAG, CLASS + "initViews() ");
         recyclerView = (RecyclerView) view.findViewById(R.id.rvMovies);
-        llContent= (LinearLayout) view.findViewById(R.id.llContent);
         pbLoading = (ProgressBar) view.findViewById(R.id.pbLoading);
+        noInternetView = (RelativeLayout) view.findViewById(R.id.noInternetView);
+        btnRetry = (Button) view.findViewById(R.id.btnRetry);
     }
 
     private void setListeners() {
         //Log.d(MovieApplication.TAG, CLASS + "setListeners()");
-        // 20 - items per one page loaded from api
-        recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
-            @Override
-            public void onLoadMore() {
-                Log.d(MovieApplication.TAG, CLASS + "onLoadMore()");
-                DataController.getInstance().loadMoreMovies();
-            }
-        });
+        scrollListener =
+                new EndlessRecyclerOnScrollListener(layoutManager, this);
+        recyclerView.addOnScrollListener(scrollListener);
 
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity().getBaseContext(), this));
+
+        btnRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(MovieApplication.TAG, CLASS + "retry");
+                showLoadingView();
+                DataController.getInstance().loadMovies();
+            }
+        });
     }
 
     private void setupRecyclerView() {
@@ -140,11 +160,55 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
         pbLoading.setVisibility(View.GONE);
     }
 
+    private void hideContentView(){
+        recyclerView.setVisibility(View.GONE);
+    }
+
+    private void hideNoInternetView(){
+        noInternetView.setVisibility(View.GONE);
+    }
+
+    private void showNoInternetView(){
+        hideContentView();
+        hideLoadingView();
+        noInternetView.setVisibility(View.VISIBLE);
+        noInternetView.bringToFront();
+    }
+
+    private void showLoadingView(){
+        hideContentView();
+        hideNoInternetView();
+        pbLoading.setVisibility(View.VISIBLE);
+    }
+
+    private void showContentView(){
+        hideNoInternetView();
+        hideLoadingView();
+        recyclerView.setVisibility(View.VISIBLE);
+    }
+
+    private void showNoInternetToast(){
+        Toast.makeText(
+                getActivity().getBaseContext()
+                , getString(R.string.no_network_connection)
+                , Toast.LENGTH_SHORT)
+                .show();
+    }
+
     /*
             RECYCLER VIEW ON CLICK LISTENER
      */
     @Override
     public void onItemClick(View view, int position) {
         //Log.d(MovieApplication.TAG, CLASS + "on click pos = " + position);
+    }
+
+    /*
+        RECYCLER VIEW ON LOAD MORE LISTENER
+    */
+    @Override
+    public void onLoadMore() {
+        Log.d(MovieApplication.TAG, CLASS + "onLoadMore()");
+        DataController.getInstance().loadMoreMovies();
     }
 }

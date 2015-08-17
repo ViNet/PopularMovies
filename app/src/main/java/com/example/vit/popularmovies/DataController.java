@@ -53,9 +53,8 @@ public class DataController {
     }
 
     public void loadMoreMovies(){
-        this.pageId++;
-        RestClient.getInstance().loadMovies(ApiUrlBuilder.buildGetMoviesOptions(pageId));
-        Log.d(MovieApplication.TAG, CLASS + ApiUrlBuilder.buildGetMoviesOptions(pageId));
+        RestClient.getInstance().loadMovies(ApiUrlBuilder.buildGetMoviesOptions(pageId+1));
+        Log.d(MovieApplication.TAG, CLASS + ApiUrlBuilder.buildGetMoviesOptions(pageId+1));
     }
 
     // CALLED FROM REST CLIENT
@@ -74,7 +73,10 @@ public class DataController {
         } else {
             // page is empty
         }
+    }
 
+    public void onNoInternet(){
+        EventMessenger.sendEvent(NetEvents.NO_INTERNET);
     }
 
     public List<Movie> getMovies(){

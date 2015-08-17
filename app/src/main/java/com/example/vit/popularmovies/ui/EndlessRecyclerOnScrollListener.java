@@ -1,5 +1,6 @@
 package com.example.vit.popularmovies.ui;
 
+import android.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -7,7 +8,9 @@ import android.util.Log;
 import com.example.vit.popularmovies.MovieApplication;
 
 
-public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener{
+public class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener{
+
+    private OnLoadMoreListener listener;
 
     public static String CLASS = EndlessRecyclerOnScrollListener.class.getSimpleName() + ": ";
 
@@ -15,8 +18,15 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     private boolean loading = true; // True if we are still waiting for the last set of data to load.
     private GridLayoutManager layoutManager;
 
-    public EndlessRecyclerOnScrollListener(GridLayoutManager layoutManager) {
+    public EndlessRecyclerOnScrollListener(GridLayoutManager layoutManager, Fragment listener) {
         this.layoutManager = layoutManager;
+        try {
+            this.listener = (OnLoadMoreListener) listener;
+        }
+        catch (ClassCastException e) {
+            throw new ClassCastException(listener.toString()
+                    + " must implement OnLoadMoreListener");
+        }
     }
 
     @Override
@@ -42,11 +52,16 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
             if ( lastVisible >= (totalItemCount - 1)) {
                 loading = true;
                 // load next page
-                onLoadMore();
+                listener.onLoadMore();
             }
         }
     }
 
+    public void setIsLoadingNow(boolean isLoading){
+        this.loading = isLoading;
+    }
 
-    public abstract void onLoadMore();
+    public interface OnLoadMoreListener{
+        void onLoadMore();
+    }
 }
