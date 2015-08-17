@@ -28,6 +28,7 @@ public class DataController {
 
     // app's data cache
     private List<Movie> movies;
+    private List<Movie> nextMovies;     // next loaded page of movies
     private int pageId = ApiConfig.START_PAGE_ID;
 
 
@@ -37,6 +38,8 @@ public class DataController {
         }
         return dataController;
     }
+
+    // CALLED FROM UI
 
     public void loadMovies(){
         if(this.movies == null){
@@ -49,19 +52,34 @@ public class DataController {
         }
     }
 
+    public void loadMoreMovies(){
+        this.pageId++;
+        RestClient.getInstance().loadMovies(ApiUrlBuilder.buildGetMoviesOptions(pageId));
+        Log.d(MovieApplication.TAG, CLASS + ApiUrlBuilder.buildGetMoviesOptions(pageId));
+    }
+
+    // CALLED FROM REST CLIENT
+
     public void onLoadedMovies(Page page){
         this.pageId = page.getPage();
         if(pageId == ApiConfig.START_PAGE_ID){
             // set new data
             this.movies = page.getMovies();
-        } else {
+            EventMessenger.sendEvent(NetEvents.ON_DATA_AVAILABLE);
+        } else if (pageId > ApiConfig.START_PAGE_ID) {
             // add new data
-            this.movies.addAll(page.getMovies());
+            this.nextMovies = page.getMovies();
+            this.movies.addAll(nextMovies);
+            EventMessenger.sendEvent(NetEvents.ON_LOAD_MORE_DATA_AVAILABLE);
+        } else {
+            // page is empty
         }
-        EventMessenger.sendEvent(NetEvents.ON_DATA_AVAILABLE);
+
     }
 
     public List<Movie> getMovies(){
         return this.movies;
     }
+
+    public List<Movie> getNextMovies() {return  this.nextMovies;}
 }

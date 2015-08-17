@@ -13,21 +13,23 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
 
     private int previousTotal = 0; // The total number of items in the dataset after the last load
     private boolean loading = true; // True if we are still waiting for the last set of data to load.
-    private int currentPage = 1;
-    private int itemsInPage = 1;    // number of items in 1 page
     private GridLayoutManager layoutManager;
 
-    public EndlessRecyclerOnScrollListener(GridLayoutManager layoutManager, int itemsInPage) {
+    public EndlessRecyclerOnScrollListener(GridLayoutManager layoutManager) {
         this.layoutManager = layoutManager;
-        this.itemsInPage = itemsInPage;
     }
 
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
         int totalItemCount = layoutManager.getItemCount();
-        int lastCompletelyVisible = layoutManager.findLastCompletelyVisibleItemPosition();
+        int lastVisible = layoutManager.findLastCompletelyVisibleItemPosition();
 
+
+        // if item can't be completely visible
+        if(lastVisible == RecyclerView.NO_POSITION){
+            lastVisible = layoutManager.findLastVisibleItemPosition();
+        }
         if(loading){
             // when success loaded
             if (totalItemCount > previousTotal) {
@@ -37,15 +39,14 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
         }
         if (!loading) {
             // end of list reached
-            if ( lastCompletelyVisible >= (totalItemCount - 1)) {
+            if ( lastVisible >= (totalItemCount - 1)) {
                 loading = true;
-                currentPage = totalItemCount / itemsInPage;
                 // load next page
-                onLoadMore(currentPage + 1);
+                onLoadMore();
             }
         }
     }
 
 
-    public abstract void onLoadMore(int currentPage);
+    public abstract void onLoadMore();
 }

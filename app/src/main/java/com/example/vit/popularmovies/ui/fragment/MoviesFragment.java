@@ -2,6 +2,7 @@ package com.example.vit.popularmovies.ui.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -53,15 +54,18 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
     public void onEvent(NetEvents event) {
         switch (event){
             case ON_DATA_AVAILABLE:
-                Log.d(MovieApplication.TAG, CLASS + "ON_DATA_AVAILABLE");
+                //Log.d(MovieApplication.TAG, CLASS + "ON_DATA_AVAILABLE");
                 List<Movie> movies = DataController.getInstance().getMovies();
-                if(movies.size() == 0){
-                    // movies on this request has been found
+                if(movies.isEmpty()){
+                    // movies on this request has been not found
                 } else {
                     adapter.setData(movies);
                     // hide loading animation
                     hideLoadingView();
                 }
+                break;
+            case ON_LOAD_MORE_DATA_AVAILABLE:
+                adapter.addData(DataController.getInstance().getNextMovies());
                 break;
         }
     }
@@ -69,7 +73,7 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(MovieApplication.TAG, CLASS + "onCreateView()");
+        //Log.d(MovieApplication.TAG, CLASS + "onCreateView()");
         view = inflater.inflate(R.layout.fragment_grid_movies, container, false);
         return view;
     }
@@ -77,7 +81,7 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d(MovieApplication.TAG, CLASS + "onViewCreated()");
+       // Log.d(MovieApplication.TAG, CLASS + "onViewCreated()");
         initViews();
         setupRecyclerView();
         setListeners();
@@ -86,7 +90,7 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(MovieApplication.TAG, CLASS + "onStart()");
+        //Log.d(MovieApplication.TAG, CLASS + "onStart()");
         BusProvider.getInstance().register(this);
         DataController.getInstance().loadMovies();
     }
@@ -94,24 +98,25 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(MovieApplication.TAG, CLASS + "onPause()");
+        //Log.d(MovieApplication.TAG, CLASS + "onPause()");
         BusProvider.getInstance().unregister(this);
     }
 
     private void initViews() {
-        Log.d(MovieApplication.TAG, CLASS + "initViews() ");
+        //Log.d(MovieApplication.TAG, CLASS + "initViews() ");
         recyclerView = (RecyclerView) view.findViewById(R.id.rvMovies);
         llContent= (LinearLayout) view.findViewById(R.id.llContent);
         pbLoading = (ProgressBar) view.findViewById(R.id.pbLoading);
     }
 
     private void setListeners() {
-        Log.d(MovieApplication.TAG, CLASS + "setListeners()");
+        //Log.d(MovieApplication.TAG, CLASS + "setListeners()");
         // 20 - items per one page loaded from api
-        recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager, 20) {
+        recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
             @Override
-            public void onLoadMore(int currentPage) {
-                Log.d(MovieApplication.TAG, CLASS + "onLoadMore() page = " + currentPage);
+            public void onLoadMore() {
+                Log.d(MovieApplication.TAG, CLASS + "onLoadMore()");
+                DataController.getInstance().loadMoreMovies();
             }
         });
 
@@ -120,7 +125,7 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
     }
 
     private void setupRecyclerView() {
-        Log.d(MovieApplication.TAG, CLASS + "setupRecyclerView");
+        //Log.d(MovieApplication.TAG, CLASS + "setupRecyclerView");
         // use a grid layout manager
         layoutManager = new GridLayoutManager(getActivity().getBaseContext(), 2);
 
@@ -140,6 +145,6 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
      */
     @Override
     public void onItemClick(View view, int position) {
-        Log.d(MovieApplication.TAG, CLASS + "on click pos = " + position);
+        //Log.d(MovieApplication.TAG, CLASS + "on click pos = " + position);
     }
 }
