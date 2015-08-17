@@ -12,6 +12,7 @@ import com.example.vit.popularmovies.rest.model.DetailedMovie;
 import com.example.vit.popularmovies.rest.model.Page;
 import com.example.vit.popularmovies.rest.model.TrailersResult;
 import com.example.vit.popularmovies.rest.service.ApiService;
+import com.example.vit.popularmovies.utils.NetworkUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.otto.Bus;
@@ -60,6 +61,8 @@ public class RestClient {
     }
 
     public void loadMovies(Map<String, String> options){
+        Log.d(MovieApplication.TAG, CLASS + NetworkUtil.getConnectivityStatusString(MovieApplication.getContext()));
+        Log.d(MovieApplication.TAG, CLASS + NetworkUtil.getConnectivityStatus(MovieApplication.getContext()));
         apiService.getMovies(options, ApiConfig.API_KEY, new Callback<Page>() {
             @Override
             public void success(Page page, Response response) {
