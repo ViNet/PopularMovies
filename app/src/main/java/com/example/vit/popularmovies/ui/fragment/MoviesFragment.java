@@ -51,9 +51,6 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
     private MoviesAdapter adapter;
     EndlessRecyclerOnScrollListener scrollListener;
 
-    // extras names
-    public final static String EXTRA_MOVIE_ID = "movieId";
-
     private View view;
 
     public static MoviesFragment getInstance() {

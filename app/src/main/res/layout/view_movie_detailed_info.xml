@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/containerMovieInfo"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <TextView
+        android:id="@+id/tvDetailTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background_movie_title"
+        android:includeFontPadding="false"
+        android:paddingBottom="@dimen/detail_title_vertical_padding"
+        android:paddingLeft="@dimen/detail_title_left_padding"
+        android:paddingTop="@dimen/detail_title_vertical_padding"
+        android:singleLine="true"
+        android:textColor="@color/text_movie_title"
+        android:textSize="36sp" />
+
+    <!-- SHADOW -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@drawable/shadow_shape" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/detail_content_padding"
+        android:paddingRight="@dimen/detail_content_padding"
+        android:paddingTop="@dimen/detail_content_padding">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingRight="@dimen/detail_content_padding">
+
+            <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/ivDetailPoster"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvDetailYear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_primary"
+                android:textSize="26sp" />
+
+            <TextView
+                android:id="@+id/tvDetailRuntime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:textColor="@color/text_primary"
+                android:textSize="20sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/tvDetailRating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="mark as favorite" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvDetailOverview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/detail_content_padding"
+        android:paddingRight="@dimen/detail_content_padding"
+        android:paddingTop="@dimen/detail_content_padding"
+        android:textColor="@color/text_primary"
+        android:textSize="14sp" />
+</LinearLayout>
