@@ -20,4 +20,8 @@ public class TrailersResult {
     public List<Trailer> getTrailers() {
         return this.trailers;
     }
+
+    public int getId(){
+        return this.id;
+    }
 }

@@ -12,6 +12,8 @@ import com.example.vit.popularmovies.rest.conf.ApiConfig;
 import com.example.vit.popularmovies.rest.model.DetailedMovie;
 import com.example.vit.popularmovies.rest.model.Movie;
 import com.example.vit.popularmovies.rest.model.Page;
+import com.example.vit.popularmovies.rest.model.Trailer;
+import com.example.vit.popularmovies.rest.model.TrailersResult;
 import com.example.vit.popularmovies.utils.ApiUrlBuilder;
 import com.squareup.otto.Bus;
 
@@ -33,6 +35,7 @@ public class DataController {
     private int pageId = ApiConfig.START_PAGE_ID;
 
     private DetailedMovie detailedMovie;
+    private TrailersResult trailersResult;
 
     public static DataController getInstance(){
         if(dataController == null){
@@ -59,17 +62,28 @@ public class DataController {
         if(detailedMovie == null || detailedMovie.getId() != movieId){
             // load from internet
             RestClient.getInstance().loadDetailMovie(movieId);
-            Log.d(MovieApplication.TAG, CLASS + "load from internet");
+            //Log.d(MovieApplication.TAG, CLASS + "load from internet");
         } else {
             // load from cache
             EventMessenger.sendEvent(NetEvents.ON_MOVIE_INFO_DATA_AVAILABLE);
-            Log.d(MovieApplication.TAG, CLASS + "load from cache");
+            //Log.d(MovieApplication.TAG, CLASS + "load from cache");
         }
     }
 
     public void loadMoreMovies(){
         RestClient.getInstance().loadMovies(ApiUrlBuilder.buildGetMoviesOptions(pageId+1));
         Log.d(MovieApplication.TAG, CLASS + ApiUrlBuilder.buildGetMoviesOptions(pageId+1));
+    }
+
+    public void loadTrailers(int movieId){
+        Log.d(MovieApplication.TAG, CLASS + "loadTrailers()");
+        if(trailersResult == null || trailersResult.getId() != movieId){
+            // load from internet
+            RestClient.getInstance().loadTrailers(movieId);
+        } else {
+            //load from cache
+            EventMessenger.sendEvent(NetEvents.ON_MOVIE_TRAILERS_DATA_AVAILABLE);
+        }
     }
 
     // CALLED FROM REST CLIENT
@@ -95,6 +109,11 @@ public class DataController {
         EventMessenger.sendEvent(NetEvents.ON_MOVIE_INFO_DATA_AVAILABLE);
     }
 
+    public void onLoadedTrailers(TrailersResult trailersResult){
+        this.trailersResult = trailersResult;
+        EventMessenger.sendEvent(NetEvents.ON_MOVIE_TRAILERS_DATA_AVAILABLE);
+    }
+
     public void onNoInternet(){
         EventMessenger.sendEvent(NetEvents.NO_INTERNET);
     }
@@ -106,4 +125,8 @@ public class DataController {
     public List<Movie> getNextMovies() {return  this.nextMovies;}
 
     public DetailedMovie getDetailedMovie() {return this.detailedMovie;}
+
+    public List<Trailer> getTrailersList(){
+        return this.trailersResult.getTrailers();
+    }
 }
