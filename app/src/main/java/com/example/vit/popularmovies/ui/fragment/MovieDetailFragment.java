@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -50,6 +51,14 @@ public class MovieDetailFragment extends Fragment {
     LinearLayout containerMovieTrailers;
     ProgressBar pbLoading;
 
+    // views of movie info container
+    TextView tvMovieTitle;
+    ImageView ivMoviePoster;
+    TextView tvMovieYear;
+    TextView tvMovieRuntime;
+    TextView tvMovieRating;
+    TextView tvMovieOverview;
+
     public static MovieDetailFragment newInstance(){
         if(instance == null){
             instance = new MovieDetailFragment();
@@ -63,8 +72,8 @@ public class MovieDetailFragment extends Fragment {
         switch (event){
             case ON_MOVIE_INFO_DATA_AVAILABLE:
                 Log.d(MovieApplication.TAG, CLASS + "ON_MOVIE_INFO_DATA_AVAILABLE");
-                //fillInfoView();
-                //showInfoView();
+                fillInfoView();
+                showInfoView();
                 break;
             case ON_MOVIE_TRAILERS_DATA_AVAILABLE:
                 Log.d(MovieApplication.TAG, CLASS + "ON_MOVIE_TRAILERS_DATA_AVAILABLE)");
@@ -110,6 +119,15 @@ public class MovieDetailFragment extends Fragment {
         containerMovieInfo = (LinearLayout) view.findViewById(R.id.containerMovieInfo);
         containerMovieTrailers = (LinearLayout) view.findViewById(R.id.containerMovieTrailers);
         pbLoading = (ProgressBar) view.findViewById(R.id.pbLoading);
+
+        //movie info views
+        tvMovieTitle = (TextView) containerMovieInfo.findViewById(R.id.tvDetailTitle);
+        ivMoviePoster = (ImageView) containerMovieInfo.findViewById(R.id.ivDetailPoster);
+        tvMovieYear = (TextView) containerMovieInfo.findViewById(R.id.tvDetailYear);
+        tvMovieRuntime = (TextView) containerMovieInfo.findViewById(R.id.tvDetailRuntime);
+        tvMovieRating = (TextView) containerMovieInfo.findViewById(R.id.tvDetailRating);
+        tvMovieOverview = (TextView) containerMovieInfo.findViewById(R.id.tvDetailOverview);
+
     }
 
     private void hideLoadingView(){
@@ -140,6 +158,23 @@ public class MovieDetailFragment extends Fragment {
     }
 
     private void fillInfoView(){
+        DetailedMovie movie = DataController.getInstance().getDetailedMovie();
+        tvMovieTitle.setText(movie.getOriginalTitle());
+        tvMovieYear.setText(movie.getReleaseDate());
+        tvMovieRuntime.setText(getString(R.string.runtime, movie.getRuntime()));
+        tvMovieRating.setText(getString(R.string.rating, movie.getVoteAverage()));
+        tvMovieOverview.setText(movie.getOverview());
+
+        Picasso.with(getActivity().getBaseContext()).load(buildUrl(movie.getPosterPath()))
+                .error(R.drawable.placeholder)
+                .placeholder(R.drawable.placeholder)
+                .into(ivMoviePoster);
+
+    }
+
+    public String buildUrl(String posterPath) {
+        final String size = "w185";
+        return "http://image.tmdb.org/t/p/" + size + "/" + posterPath;
     }
 
 }
