@@ -79,9 +79,11 @@ public class DataController {
         Log.d(MovieApplication.TAG, CLASS + "loadTrailers()");
         if(trailersResult == null || trailersResult.getId() != movieId){
             // load from internet
+            //Log.d(MovieApplication.TAG, CLASS + "load from internet");
             RestClient.getInstance().loadTrailers(movieId);
         } else {
             //load from cache
+            //Log.d(MovieApplication.TAG, CLASS + "load from cache");
             EventMessenger.sendEvent(NetEvents.ON_MOVIE_TRAILERS_DATA_AVAILABLE);
         }
     }

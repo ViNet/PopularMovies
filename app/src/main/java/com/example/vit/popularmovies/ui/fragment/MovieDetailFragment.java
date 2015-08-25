@@ -59,6 +59,10 @@ public class MovieDetailFragment extends Fragment {
     TextView tvMovieRating;
     TextView tvMovieOverview;
 
+    // views of movie trailers container
+    RecyclerView rvTrailersList;
+
+
     public static MovieDetailFragment newInstance(){
         if(instance == null){
             instance = new MovieDetailFragment();
@@ -77,6 +81,8 @@ public class MovieDetailFragment extends Fragment {
                 break;
             case ON_MOVIE_TRAILERS_DATA_AVAILABLE:
                 Log.d(MovieApplication.TAG, CLASS + "ON_MOVIE_TRAILERS_DATA_AVAILABLE)");
+                setupRecyclerView();
+                showTrailersView();
                 break;
             case NO_INTERNET:
                 Log.d(MovieApplication.TAG, CLASS + "NO_INTERNET");
@@ -105,7 +111,9 @@ public class MovieDetailFragment extends Fragment {
         super.onStart();
         //Log.d(MovieApplication.TAG, CLASS + "onStart()");
         BusProvider.getInstance().register(this);
-        DataController.getInstance().loadDetailedMovie(getActivity().getIntent().getIntExtra(ExtraName.MOVIE_ID, 0));
+        int movieId = getActivity().getIntent().getIntExtra(ExtraName.MOVIE_ID, 0);
+        DataController.getInstance().loadDetailedMovie(movieId);
+        DataController.getInstance().loadTrailers(movieId);
     }
 
     @Override
@@ -128,6 +136,8 @@ public class MovieDetailFragment extends Fragment {
         tvMovieRating = (TextView) containerMovieInfo.findViewById(R.id.tvDetailRating);
         tvMovieOverview = (TextView) containerMovieInfo.findViewById(R.id.tvDetailOverview);
 
+        // trailers views
+        rvTrailersList = (RecyclerView) containerMovieTrailers.findViewById(R.id.rvTrailersList);
     }
 
     private void hideLoadingView(){
@@ -169,7 +179,20 @@ public class MovieDetailFragment extends Fragment {
                 .error(R.drawable.placeholder)
                 .placeholder(R.drawable.placeholder)
                 .into(ivMoviePoster);
+    }
 
+    private void setupRecyclerView(){
+        //Log.d(MovieApplication.TAG, CLASS + "setupRecyclerView");
+        // use a grid layout manager
+        LinearLayoutManager layoutManager =
+                new LinearLayoutManager(getActivity().
+                        getBaseContext(), LinearLayoutManager.HORIZONTAL, false);
+
+        rvTrailersList.setLayoutManager(layoutManager);
+        // specify an adapter
+        TrailersAdapter adapter =
+                new TrailersAdapter(getActivity().getBaseContext(), DataController.getInstance().getTrailersList());
+        rvTrailersList.setAdapter(adapter);
     }
 
     public String buildUrl(String posterPath) {
