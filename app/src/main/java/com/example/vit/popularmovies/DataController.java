@@ -9,6 +9,7 @@ import com.example.vit.popularmovies.communication.EventMessenger;
 import com.example.vit.popularmovies.communication.NetEvents;
 import com.example.vit.popularmovies.rest.RestClient;
 import com.example.vit.popularmovies.rest.conf.ApiConfig;
+import com.example.vit.popularmovies.rest.model.DetailedMovie;
 import com.example.vit.popularmovies.rest.model.Movie;
 import com.example.vit.popularmovies.rest.model.Page;
 import com.example.vit.popularmovies.utils.ApiUrlBuilder;
@@ -31,6 +32,7 @@ public class DataController {
     private List<Movie> nextMovies;     // next loaded page of movies
     private int pageId = ApiConfig.START_PAGE_ID;
 
+    private DetailedMovie detailedMovie;
 
     public static DataController getInstance(){
         if(dataController == null){
@@ -45,10 +47,23 @@ public class DataController {
         if(this.movies == null){
             // load from internet
             RestClient.getInstance().loadMovies(ApiUrlBuilder.buildGetMoviesOptions(pageId));
-            Log.d(MovieApplication.TAG, CLASS + ApiUrlBuilder.buildGetMoviesOptions(pageId));
+            //Log.d(MovieApplication.TAG, CLASS + ApiUrlBuilder.buildGetMoviesOptions(pageId));
         } else {
             // load from cache
             EventMessenger.sendEvent(NetEvents.ON_DATA_AVAILABLE);
+        }
+    }
+
+    public void loadDetailedMovie(int movieId){
+        Log.d(MovieApplication.TAG, CLASS + "loadDetailedMovie()");
+        if(detailedMovie == null || detailedMovie.getId() != movieId){
+            // load from internet
+            RestClient.getInstance().loadDetailMovie(movieId);
+            Log.d(MovieApplication.TAG, CLASS + "load from internet");
+        } else {
+            // load from cache
+            EventMessenger.sendEvent(NetEvents.ON_MOVIE_INFO_DATA_AVAILABLE);
+            Log.d(MovieApplication.TAG, CLASS + "load from cache");
         }
     }
 
@@ -75,6 +90,11 @@ public class DataController {
         }
     }
 
+    public void onLoadedDetailedMovie(DetailedMovie detailedMovie){
+        this.detailedMovie = detailedMovie;
+        EventMessenger.sendEvent(NetEvents.ON_MOVIE_INFO_DATA_AVAILABLE);
+    }
+
     public void onNoInternet(){
         EventMessenger.sendEvent(NetEvents.NO_INTERNET);
     }
@@ -84,4 +104,6 @@ public class DataController {
     }
 
     public List<Movie> getNextMovies() {return  this.nextMovies;}
+
+    public DetailedMovie getDetailedMovie() {return this.detailedMovie;}
 }

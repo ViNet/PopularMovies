@@ -79,4 +79,23 @@ public class RestClient {
         }
     }
 
+    public void loadDetailMovie(int movieId){
+        if(NetworkUtil.getConnectivityStatus(MovieApplication.getContext()) != NetworkUtil.TYPE_NOT_CONNECTED) {
+            apiService.getDetailedMovie(movieId, ApiConfig.API_KEY, new Callback<DetailedMovie>() {
+                @Override
+                public void success(DetailedMovie detailedMovie, Response response) {
+                    Log.d(MovieApplication.TAG, CLASS + "loadDetailedMovie.success()");
+                    DataController.getInstance().onLoadedDetailedMovie(detailedMovie);
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.d(MovieApplication.TAG, CLASS + "loadDetailedMovie.failure() error - " + error.toString());
+                }
+            });
+        } else {
+            DataController.getInstance().onNoInternet();
+        }
+    }
+
 }
