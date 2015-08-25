@@ -14,9 +14,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.vit.popularmovies.DataController;
@@ -50,6 +52,7 @@ public class MovieDetailFragment extends Fragment {
     LinearLayout containerMovieInfo;
     LinearLayout containerMovieTrailers;
     ProgressBar pbLoading;
+    RelativeLayout noInternetView;
 
     // views of movie info container
     TextView tvMovieTitle;
@@ -61,6 +64,9 @@ public class MovieDetailFragment extends Fragment {
 
     // views of movie trailers container
     RecyclerView rvTrailersList;
+
+    // view of no internet view
+    Button btnRetry;
 
 
     public static MovieDetailFragment newInstance(){
@@ -86,6 +92,7 @@ public class MovieDetailFragment extends Fragment {
                 break;
             case NO_INTERNET:
                 Log.d(MovieApplication.TAG, CLASS + "NO_INTERNET");
+                showNoInternetView();
                 break;
         }
     }
@@ -102,8 +109,7 @@ public class MovieDetailFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initViews();
-        //setupRecyclerView();
-        //setListeners();
+        setListeners();
     }
 
     @Override
@@ -127,6 +133,7 @@ public class MovieDetailFragment extends Fragment {
         containerMovieInfo = (LinearLayout) view.findViewById(R.id.containerMovieInfo);
         containerMovieTrailers = (LinearLayout) view.findViewById(R.id.containerMovieTrailers);
         pbLoading = (ProgressBar) view.findViewById(R.id.pbLoading);
+        noInternetView = (RelativeLayout) view.findViewById(R.id.noInternetView);
 
         //movie info views
         tvMovieTitle = (TextView) containerMovieInfo.findViewById(R.id.tvDetailTitle);
@@ -138,6 +145,24 @@ public class MovieDetailFragment extends Fragment {
 
         // trailers views
         rvTrailersList = (RecyclerView) containerMovieTrailers.findViewById(R.id.rvTrailersList);
+
+        // no internet views
+        btnRetry = (Button) noInternetView.findViewById(R.id.btnRetry);
+    }
+
+    private void setListeners(){
+        // listener for no internet view
+        btnRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Log.d(MovieApplication.TAG, CLASS + "onRetryClick()");
+                showLoadingView();
+                int movieId = getActivity().getIntent().getIntExtra(ExtraName.MOVIE_ID, 0);
+                DataController.getInstance().loadDetailedMovie(movieId);
+                DataController.getInstance().loadTrailers(movieId);
+
+            }
+        });
     }
 
     private void hideLoadingView(){
@@ -152,9 +177,15 @@ public class MovieDetailFragment extends Fragment {
         containerMovieTrailers.setVisibility(View.GONE);
     }
 
+    private void hideNoInternetView(){
+        noInternetView.setVisibility(View.GONE);
+    }
+
     private void showLoadingView(){
         hideInfoView();
         hideTrailersView();
+        hideNoInternetView();
+        pbLoading.setVisibility(View.VISIBLE);
     }
 
     private void showInfoView(){
@@ -165,6 +196,13 @@ public class MovieDetailFragment extends Fragment {
     private void showTrailersView(){
         hideLoadingView();
         containerMovieTrailers.setVisibility(View.VISIBLE);
+    }
+
+    private void showNoInternetView(){
+        hideLoadingView();
+        hideTrailersView();
+        hideInfoView();
+        noInternetView.setVisibility(View.VISIBLE);
     }
 
     private void fillInfoView(){

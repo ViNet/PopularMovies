@@ -29,5 +29,7 @@
         android:layout_height="40dp"
         android:layout_centerInParent="true" />
 
+    <include layout="@layout/view_no_internet" />
+
 </RelativeLayout>
 
