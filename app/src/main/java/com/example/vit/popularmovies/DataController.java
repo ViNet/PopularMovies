@@ -44,6 +44,12 @@ public class DataController {
         return dataController;
     }
 
+    public void clearData(){
+        this.movies = null;
+        this.nextMovies = null;
+        pageId = ApiConfig.START_PAGE_ID;
+    }
+
     // CALLED FROM UI
 
     public void loadMovies(){
