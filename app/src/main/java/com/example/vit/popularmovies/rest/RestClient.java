@@ -1,12 +1,9 @@
 package com.example.vit.popularmovies.rest;
 
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.example.vit.popularmovies.DataController;
 import com.example.vit.popularmovies.MovieApplication;
-import com.example.vit.popularmovies.communication.BusProvider;
-import com.example.vit.popularmovies.communication.Event;
 import com.example.vit.popularmovies.rest.conf.ApiConfig;
 import com.example.vit.popularmovies.rest.model.DetailedMovie;
 import com.example.vit.popularmovies.rest.model.Page;
@@ -16,7 +13,6 @@ import com.example.vit.popularmovies.utils.NetworkUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
 
 import java.util.Map;
 
@@ -35,8 +31,8 @@ public class RestClient {
     private ApiService apiService;
     private Bus bus;
 
-    public static RestClient getInstance(){
-        if(restClient == null){
+    public static RestClient getInstance() {
+        if (restClient == null) {
             restClient = new RestClient();
         }
         return restClient;
@@ -60,8 +56,8 @@ public class RestClient {
         return apiService;
     }
 
-    public void loadMovies(Map<String, String> options){
-        if(NetworkUtil.getConnectivityStatus(MovieApplication.getContext()) != NetworkUtil.TYPE_NOT_CONNECTED) {
+    public void loadMovies(Map<String, String> options) {
+        if (NetworkUtil.getConnectivityStatus(MovieApplication.getContext()) != NetworkUtil.TYPE_NOT_CONNECTED) {
             apiService.getMovies(options, ApiConfig.API_KEY, new Callback<Page>() {
                 @Override
                 public void success(Page page, Response response) {
@@ -79,8 +75,8 @@ public class RestClient {
         }
     }
 
-    public void loadDetailMovie(int movieId){
-        if(NetworkUtil.getConnectivityStatus(MovieApplication.getContext()) != NetworkUtil.TYPE_NOT_CONNECTED) {
+    public void loadDetailMovie(int movieId) {
+        if (NetworkUtil.getConnectivityStatus(MovieApplication.getContext()) != NetworkUtil.TYPE_NOT_CONNECTED) {
             apiService.getDetailedMovie(movieId, ApiConfig.API_KEY, new Callback<DetailedMovie>() {
                 @Override
                 public void success(DetailedMovie detailedMovie, Response response) {
@@ -98,8 +94,8 @@ public class RestClient {
         }
     }
 
-    public void loadTrailers(int movieId){
-        if(NetworkUtil.getConnectivityStatus(MovieApplication.getContext()) != NetworkUtil.TYPE_NOT_CONNECTED) {
+    public void loadTrailers(int movieId) {
+        if (NetworkUtil.getConnectivityStatus(MovieApplication.getContext()) != NetworkUtil.TYPE_NOT_CONNECTED) {
             apiService.getVideosByMovieId(movieId, ApiConfig.API_KEY, new Callback<TrailersResult>() {
                 @Override
                 public void success(TrailersResult trailersResult, Response response) {

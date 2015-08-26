@@ -1,4 +1,4 @@
-package com.example.vit.popularmovies.ui;
+package com.example.vit.popularmovies.ui.view;
 
 import android.content.Context;
 import android.graphics.Canvas;

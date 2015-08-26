@@ -13,7 +13,7 @@
         android:scaleType="fitCenter"
         />
 
-    <com.example.vit.popularmovies.ui.Triangle
+    <com.example.vit.popularmovies.ui.view.Triangle
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:padding="15dp"

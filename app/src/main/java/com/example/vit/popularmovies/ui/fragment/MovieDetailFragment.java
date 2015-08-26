@@ -5,9 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -26,21 +24,13 @@ import com.example.vit.popularmovies.ExtraName;
 import com.example.vit.popularmovies.MovieApplication;
 import com.example.vit.popularmovies.R;
 import com.example.vit.popularmovies.communication.BusProvider;
-import com.example.vit.popularmovies.communication.Event;
 import com.example.vit.popularmovies.communication.NetEvents;
 import com.example.vit.popularmovies.rest.model.DetailedMovie;
-import com.example.vit.popularmovies.rest.model.Movie;
-import com.example.vit.popularmovies.rest.model.Trailer;
-import com.example.vit.popularmovies.ui.RecyclerItemClickListener;
 import com.example.vit.popularmovies.ui.adapter.TrailersAdapter;
+import com.example.vit.popularmovies.ui.listener.RecyclerItemClickListener;
 import com.example.vit.popularmovies.utils.ApiUrlBuilder;
-import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
-
-import org.parceler.Parcels;
-
-import java.util.List;
 
 
 public class MovieDetailFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener {
@@ -70,17 +60,17 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
     Button btnRetry;
 
 
-    public static MovieDetailFragment newInstance(){
-        if(instance == null){
+    public static MovieDetailFragment newInstance() {
+        if (instance == null) {
             instance = new MovieDetailFragment();
         }
         return instance;
     }
 
     @Subscribe
-    public void onEvent(NetEvents event){
+    public void onEvent(NetEvents event) {
         Log.d(MovieApplication.TAG, CLASS + "onEvent()");
-        switch (event){
+        switch (event) {
             case ON_MOVIE_INFO_DATA_AVAILABLE:
                 Log.d(MovieApplication.TAG, CLASS + "ON_MOVIE_INFO_DATA_AVAILABLE");
                 fillInfoView();
@@ -134,7 +124,7 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
         BusProvider.getInstance().unregister(this);
     }
 
-    private void initViews(){
+    private void initViews() {
         containerMovieInfo = (LinearLayout) view.findViewById(R.id.containerMovieInfo);
         containerMovieTrailers = (LinearLayout) view.findViewById(R.id.containerMovieTrailers);
         pbLoading = (ProgressBar) view.findViewById(R.id.pbLoading);
@@ -155,7 +145,7 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
         btnRetry = (Button) noInternetView.findViewById(R.id.btnRetry);
     }
 
-    private void setListeners(){
+    private void setListeners() {
         // listener for no internet view
         btnRetry.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,7 +164,7 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
                 (new RecyclerItemClickListener(getActivity().getBaseContext(), this));
     }
 
-    private void setupRecyclerView(){
+    private void setupRecyclerView() {
         //Log.d(MovieApplication.TAG, CLASS + "setupRecyclerView");
         // use a grid layout manager
         LinearLayoutManager layoutManager =
@@ -188,47 +178,47 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
         rvTrailersList.setAdapter(adapter);
     }
 
-    private void hideLoadingView(){
-       pbLoading.setVisibility(View.GONE);
+    private void hideLoadingView() {
+        pbLoading.setVisibility(View.GONE);
     }
 
-    private void hideInfoView(){
+    private void hideInfoView() {
         containerMovieInfo.setVisibility(View.GONE);
     }
 
-    private void hideTrailersView(){
+    private void hideTrailersView() {
         containerMovieTrailers.setVisibility(View.GONE);
     }
 
-    private void hideNoInternetView(){
+    private void hideNoInternetView() {
         noInternetView.setVisibility(View.GONE);
     }
 
-    private void showLoadingView(){
+    private void showLoadingView() {
         hideInfoView();
         hideTrailersView();
         hideNoInternetView();
         pbLoading.setVisibility(View.VISIBLE);
     }
 
-    private void showInfoView(){
+    private void showInfoView() {
         hideLoadingView();
         containerMovieInfo.setVisibility(View.VISIBLE);
     }
 
-    private void showTrailersView(){
+    private void showTrailersView() {
         hideLoadingView();
         containerMovieTrailers.setVisibility(View.VISIBLE);
     }
 
-    private void showNoInternetView(){
+    private void showNoInternetView() {
         hideLoadingView();
         hideTrailersView();
         hideInfoView();
         noInternetView.setVisibility(View.VISIBLE);
     }
 
-    private void fillInfoView(){
+    private void fillInfoView() {
         DetailedMovie movie = DataController.getInstance().getDetailedMovie();
         tvMovieTitle.setText(movie.getOriginalTitle());
         tvMovieYear.setText(movie.getReleaseDate());
@@ -249,13 +239,13 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
         watchYoutubeVideo(DataController.getInstance().getTrailersList().get(position).getKey());
     }
 
-    private void watchYoutubeVideo(String key){
-        try{
+    private void watchYoutubeVideo(String key) {
+        try {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + key));
             startActivity(intent);
-        }catch (ActivityNotFoundException ex){
-            Intent intent=new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("http://www.youtube.com/watch?v="+key));
+        } catch (ActivityNotFoundException ex) {
+            Intent intent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://www.youtube.com/watch?v=" + key));
             startActivity(intent);
         }
     }

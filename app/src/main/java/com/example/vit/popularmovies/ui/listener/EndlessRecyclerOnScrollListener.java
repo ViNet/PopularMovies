@@ -1,11 +1,8 @@
-package com.example.vit.popularmovies.ui;
+package com.example.vit.popularmovies.ui.listener;
 
 import android.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-
-import com.example.vit.popularmovies.MovieApplication;
 
 
 public class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener{
