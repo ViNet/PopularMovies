@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import com.example.vit.popularmovies.MovieApplication;
 import com.example.vit.popularmovies.R;
 import com.example.vit.popularmovies.rest.model.Movie;
+import com.example.vit.popularmovies.utils.ApiUrlBuilder;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -51,10 +52,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        //holder.textView.setText(dataset[position]);
         //Log.d(MovieApplication.TAG, CLASS + "url: " + buildUrl(moviesList.get(position).getPosterPath()));
 
-        Picasso.with(context).load(buildUrl(moviesList.get(position).getPosterPath()))
+        Picasso.with(context)
+                .load(ApiUrlBuilder.buildPosterUrl(moviesList.get(position).getPosterPath()))
                 .error(R.drawable.placeholder)
                 .placeholder(R.drawable.placeholder)
                 .into(holder.poster);
@@ -77,11 +78,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
     public Movie getItemAtPosition(int position){
         return this.moviesList.get(position);
-    }
-
-    public String buildUrl(String posterPath) {
-        final String size = "w185";
-        return "http://image.tmdb.org/t/p/" + size + "/" + posterPath;
     }
 
 }

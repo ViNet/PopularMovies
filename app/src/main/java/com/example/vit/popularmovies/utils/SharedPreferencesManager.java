@@ -1,9 +1,11 @@
-package com.example.vit.popularmovies;
+package com.example.vit.popularmovies.utils;
 
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import com.example.vit.popularmovies.R;
 
 public class SharedPreferencesManager {
 

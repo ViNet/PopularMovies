@@ -33,6 +33,7 @@ import com.example.vit.popularmovies.rest.model.Movie;
 import com.example.vit.popularmovies.rest.model.Trailer;
 import com.example.vit.popularmovies.ui.RecyclerItemClickListener;
 import com.example.vit.popularmovies.ui.adapter.TrailersAdapter;
+import com.example.vit.popularmovies.utils.ApiUrlBuilder;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -213,7 +214,8 @@ public class MovieDetailFragment extends Fragment {
         tvMovieRating.setText(getString(R.string.rating, movie.getVoteAverage()));
         tvMovieOverview.setText(movie.getOverview());
 
-        Picasso.with(getActivity().getBaseContext()).load(buildUrl(movie.getPosterPath()))
+        Picasso.with(getActivity().getBaseContext())
+                .load(ApiUrlBuilder.buildPosterUrl(movie.getPosterPath()))
                 .error(R.drawable.placeholder)
                 .placeholder(R.drawable.placeholder)
                 .into(ivMoviePoster);
@@ -232,10 +234,4 @@ public class MovieDetailFragment extends Fragment {
                 new TrailersAdapter(getActivity().getBaseContext(), DataController.getInstance().getTrailersList());
         rvTrailersList.setAdapter(adapter);
     }
-
-    public String buildUrl(String posterPath) {
-        final String size = "w185";
-        return "http://image.tmdb.org/t/p/" + size + "/" + posterPath;
-    }
-
 }

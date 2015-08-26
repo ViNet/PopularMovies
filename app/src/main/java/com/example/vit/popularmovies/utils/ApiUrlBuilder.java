@@ -1,10 +1,6 @@
 package com.example.vit.popularmovies.utils;
 
 
-import com.example.vit.popularmovies.R;
-import com.example.vit.popularmovies.SharedPreferencesManager;
-import com.example.vit.popularmovies.communication.Event;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,5 +15,10 @@ public class ApiUrlBuilder {
         options.put(SORT_BY, SharedPreferencesManager.getPrefSortBy());
         options.put(PAGE, String.valueOf(pageId));
         return options;
+    }
+
+    public static String buildPosterUrl(String posterPath) {
+        final String size = "w185";
+        return "http://image.tmdb.org/t/p/" + size + "/" + posterPath;
     }
 }

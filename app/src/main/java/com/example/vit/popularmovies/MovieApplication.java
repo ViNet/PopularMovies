@@ -2,13 +2,11 @@ package com.example.vit.popularmovies;
 
 import android.app.Application;
 import android.content.Context;
-import android.provider.ContactsContract;
 import android.util.Log;
 
-import com.example.vit.popularmovies.communication.BusProvider;
 import com.example.vit.popularmovies.communication.EventMessenger;
 import com.example.vit.popularmovies.rest.RestClient;
-import com.squareup.otto.Bus;
+import com.example.vit.popularmovies.utils.SharedPreferencesManager;
 
 
 public class MovieApplication extends Application {
