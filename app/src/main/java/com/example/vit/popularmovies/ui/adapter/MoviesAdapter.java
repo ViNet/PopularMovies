@@ -2,13 +2,12 @@ package com.example.vit.popularmovies.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.example.vit.popularmovies.MovieApplication;
 import com.example.vit.popularmovies.R;
 import com.example.vit.popularmovies.rest.model.Movie;
 import com.example.vit.popularmovies.utils.ApiUrlBuilder;
@@ -28,10 +27,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     // Provide a reference to the views for each data item
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView poster;
+        public TextView title;
 
         public ViewHolder(View v) {
             super(v);
             poster = (ImageView) v.findViewById(R.id.ivItemPoster);
+            title = (TextView) v.findViewById(R.id.tvItemTitle);
         }
     }
 
@@ -53,6 +54,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         //Log.d(MovieApplication.TAG, CLASS + "url: " + buildUrl(moviesList.get(position).getPosterPath()));
+
+        holder.title.setText(moviesList.get(position).getTitle());
 
         Picasso.with(context)
                 .load(ApiUrlBuilder.buildPosterUrl(moviesList.get(position).getPosterPath()))
