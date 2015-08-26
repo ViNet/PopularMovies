@@ -9,7 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.vit.popularmovies.R;
-import com.example.vit.popularmovies.communication.BusProvider;
 import com.example.vit.popularmovies.ui.fragment.MoviesFragment;
 
 
@@ -22,15 +21,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Log.d(MovieApplication.TAG, CLASS + "onCreate()");
         setContentView(R.layout.activity_main);
         initToolbar();
         startFragment();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        BusProvider.getInstance().register(this);
     }
 
     @Override
@@ -51,12 +45,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        BusProvider.getInstance().unregister(this);
-    }
-
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
@@ -65,8 +53,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startFragment() {
+        //Log.d(MovieApplication.TAG, CLASS + "startFragment()");
         moviesFragment = (MoviesFragment) getFragmentManager().findFragmentById(R.id.movies_container);
         if (moviesFragment == null) {
+            //Log.d(MovieApplication.TAG, CLASS + "create new instance of movie fragment");
             moviesFragment = MoviesFragment.getInstance();
             getFragmentManager().beginTransaction().
                     replace(R.id.movies_container, moviesFragment).commit();
