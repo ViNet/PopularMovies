@@ -43,7 +43,7 @@ import org.parceler.Parcels;
 import java.util.List;
 
 
-public class MovieDetailFragment extends Fragment {
+public class MovieDetailFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener {
 
     static final String CLASS = MovieDetailFragment.class.getSimpleName() + ": ";
 
@@ -164,6 +164,24 @@ public class MovieDetailFragment extends Fragment {
 
             }
         });
+
+        // listeners for trailers view
+        rvTrailersList.addOnItemTouchListener
+                (new RecyclerItemClickListener(getActivity().getBaseContext(), this));
+    }
+
+    private void setupRecyclerView(){
+        //Log.d(MovieApplication.TAG, CLASS + "setupRecyclerView");
+        // use a grid layout manager
+        LinearLayoutManager layoutManager =
+                new LinearLayoutManager(getActivity().
+                        getBaseContext(), LinearLayoutManager.HORIZONTAL, false);
+
+        rvTrailersList.setLayoutManager(layoutManager);
+        // specify an adapter
+        TrailersAdapter adapter =
+                new TrailersAdapter(getActivity().getBaseContext(), DataController.getInstance().getTrailersList());
+        rvTrailersList.setAdapter(adapter);
     }
 
     private void hideLoadingView(){
@@ -221,17 +239,20 @@ public class MovieDetailFragment extends Fragment {
                 .into(ivMoviePoster);
     }
 
-    private void setupRecyclerView(){
-        //Log.d(MovieApplication.TAG, CLASS + "setupRecyclerView");
-        // use a grid layout manager
-        LinearLayoutManager layoutManager =
-                new LinearLayoutManager(getActivity().
-                        getBaseContext(), LinearLayoutManager.HORIZONTAL, false);
+    @Override
+    public void onItemClick(View view, int position) {
+        Log.d(MovieApplication.TAG, CLASS + " click on - " + position);
+        watchYoutubeVideo(DataController.getInstance().getTrailersList().get(position).getKey());
+    }
 
-        rvTrailersList.setLayoutManager(layoutManager);
-        // specify an adapter
-        TrailersAdapter adapter =
-                new TrailersAdapter(getActivity().getBaseContext(), DataController.getInstance().getTrailersList());
-        rvTrailersList.setAdapter(adapter);
+    private void watchYoutubeVideo(String key){
+        try{
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + key));
+            startActivity(intent);
+        }catch (ActivityNotFoundException ex){
+            Intent intent=new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://www.youtube.com/watch?v="+key));
+            startActivity(intent);
+        }
     }
 }
