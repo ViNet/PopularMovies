@@ -87,9 +87,13 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
                 showInfoView();
                 break;
             case ON_MOVIE_TRAILERS_DATA_AVAILABLE:
-                Log.d(MovieApplication.TAG, CLASS + "ON_MOVIE_TRAILERS_DATA_AVAILABLE)");
+                Log.d(MovieApplication.TAG, CLASS + "ON_MOVIE_TRAILERS_DATA_AVAILABLE");
                 setupRecyclerView();
                 showTrailersView();
+                break;
+            case ON_MOVIE_TRAILERS_NO_DATA:
+                Log.d(MovieApplication.TAG, CLASS + "ON_MOVIE_TRAILERS_NO_DATA");
+                hideTrailersView();
                 break;
             case NO_INTERNET:
                 Log.d(MovieApplication.TAG, CLASS + "NO_INTERNET");

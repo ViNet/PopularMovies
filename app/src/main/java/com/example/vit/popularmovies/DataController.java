@@ -1,5 +1,6 @@
 package com.example.vit.popularmovies;
 
+import android.app.Application;
 import android.provider.ContactsContract;
 import android.util.Log;
 
@@ -87,6 +88,9 @@ public class DataController {
             // load from internet
             //Log.d(MovieApplication.TAG, CLASS + "load from internet");
             RestClient.getInstance().loadTrailers(movieId);
+        } else if(trailersResult.getTrailers().isEmpty()){
+            // trailers for this movie doesn't exist
+            EventMessenger.sendEvent(NetEvents.ON_MOVIE_TRAILERS_NO_DATA);
         } else {
             //load from cache
             //Log.d(MovieApplication.TAG, CLASS + "load from cache");
@@ -118,8 +122,12 @@ public class DataController {
     }
 
     public void onLoadedTrailers(TrailersResult trailersResult){
+        if(trailersResult.getTrailers().isEmpty()){
+            EventMessenger.sendEvent(NetEvents.ON_MOVIE_TRAILERS_NO_DATA);
+        } else {
+            EventMessenger.sendEvent(NetEvents.ON_MOVIE_TRAILERS_DATA_AVAILABLE);
+        }
         this.trailersResult = trailersResult;
-        EventMessenger.sendEvent(NetEvents.ON_MOVIE_TRAILERS_DATA_AVAILABLE);
     }
 
     public void onNoInternet(){
