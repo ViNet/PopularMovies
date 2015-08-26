@@ -1,11 +1,7 @@
 package com.example.vit.popularmovies;
 
-import android.app.Application;
-import android.provider.ContactsContract;
 import android.util.Log;
 
-import com.example.vit.popularmovies.communication.BusProvider;
-import com.example.vit.popularmovies.communication.Event;
 import com.example.vit.popularmovies.communication.EventMessenger;
 import com.example.vit.popularmovies.communication.NetEvents;
 import com.example.vit.popularmovies.rest.RestClient;
@@ -16,9 +12,7 @@ import com.example.vit.popularmovies.rest.model.Page;
 import com.example.vit.popularmovies.rest.model.Trailer;
 import com.example.vit.popularmovies.rest.model.TrailersResult;
 import com.example.vit.popularmovies.utils.ApiUrlBuilder;
-import com.squareup.otto.Bus;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,14 +32,14 @@ public class DataController {
     private DetailedMovie detailedMovie;
     private TrailersResult trailersResult;
 
-    public static DataController getInstance(){
-        if(dataController == null){
+    public static DataController getInstance() {
+        if (dataController == null) {
             dataController = new DataController();
         }
         return dataController;
     }
 
-    public void clearData(){
+    public void clearData() {
         this.movies = null;
         this.nextMovies = null;
         pageId = ApiConfig.START_PAGE_ID;
@@ -53,8 +47,8 @@ public class DataController {
 
     // CALLED FROM UI
 
-    public void loadMovies(){
-        if(this.movies == null){
+    public void loadMovies() {
+        if (this.movies == null) {
             // load from internet
             RestClient.getInstance().loadMovies(ApiUrlBuilder.buildGetMoviesOptions(pageId));
             //Log.d(MovieApplication.TAG, CLASS + ApiUrlBuilder.buildGetMoviesOptions(pageId));
@@ -64,9 +58,9 @@ public class DataController {
         }
     }
 
-    public void loadDetailedMovie(int movieId){
-        Log.d(MovieApplication.TAG, CLASS + "loadDetailedMovie()");
-        if(detailedMovie == null || detailedMovie.getId() != movieId){
+    public void loadDetailedMovie(int movieId) {
+        //Log.d(MovieApplication.TAG, CLASS + "loadDetailedMovie()");
+        if (detailedMovie == null || detailedMovie.getId() != movieId) {
             // load from internet
             RestClient.getInstance().loadDetailMovie(movieId);
             //Log.d(MovieApplication.TAG, CLASS + "load from internet");
@@ -77,32 +71,34 @@ public class DataController {
         }
     }
 
-    public void loadMoreMovies(){
-        RestClient.getInstance().loadMovies(ApiUrlBuilder.buildGetMoviesOptions(pageId+1));
-        Log.d(MovieApplication.TAG, CLASS + ApiUrlBuilder.buildGetMoviesOptions(pageId+1));
+    public void loadMoreMovies() {
+        RestClient.getInstance().loadMovies(ApiUrlBuilder.buildGetMoviesOptions(pageId + 1));
+        Log.d(MovieApplication.TAG, CLASS + ApiUrlBuilder.buildGetMoviesOptions(pageId + 1));
     }
 
-    public void loadTrailers(int movieId){
-        Log.d(MovieApplication.TAG, CLASS + "loadTrailers()");
-        if(trailersResult == null || trailersResult.getId() != movieId){
+    public void loadTrailers(int movieId) {
+        //Log.d(MovieApplication.TAG, CLASS + "loadTrailers()");
+        if (trailersResult == null || trailersResult.getId() != movieId) {
             // load from internet
             //Log.d(MovieApplication.TAG, CLASS + "load from internet");
             RestClient.getInstance().loadTrailers(movieId);
-        } else if(trailersResult.getTrailers().isEmpty()){
-            // trailers for this movie doesn't exist
-            EventMessenger.sendEvent(NetEvents.ON_MOVIE_TRAILERS_NO_DATA);
         } else {
-            //load from cache
-            //Log.d(MovieApplication.TAG, CLASS + "load from cache");
-            EventMessenger.sendEvent(NetEvents.ON_MOVIE_TRAILERS_DATA_AVAILABLE);
+            if(trailersResult.getTrailers().isEmpty()){
+                // trailers for this movie doesn't exist
+                EventMessenger.sendEvent(NetEvents.ON_MOVIE_TRAILERS_NO_DATA);
+            } else {
+                //load from cache
+                //Log.d(MovieApplication.TAG, CLASS + "load from cache");
+                EventMessenger.sendEvent(NetEvents.ON_MOVIE_TRAILERS_DATA_AVAILABLE);
+            }
         }
     }
 
     // CALLED FROM REST CLIENT
 
-    public void onLoadedMovies(Page page){
+    public void onLoadedMovies(Page page) {
         this.pageId = page.getPage();
-        if(pageId == ApiConfig.START_PAGE_ID){
+        if (pageId == ApiConfig.START_PAGE_ID) {
             // set new data
             this.movies = page.getMovies();
             EventMessenger.sendEvent(NetEvents.ON_DATA_AVAILABLE);
@@ -116,33 +112,39 @@ public class DataController {
         }
     }
 
-    public void onLoadedDetailedMovie(DetailedMovie detailedMovie){
+    public void onLoadedDetailedMovie(DetailedMovie detailedMovie) {
         this.detailedMovie = detailedMovie;
         EventMessenger.sendEvent(NetEvents.ON_MOVIE_INFO_DATA_AVAILABLE);
     }
 
-    public void onLoadedTrailers(TrailersResult trailersResult){
-        if(trailersResult.getTrailers().isEmpty()){
+    public void onLoadedTrailers(TrailersResult trailersResult) {
+        //Log.d(MovieApplication.TAG, CLASS + "onLoadedTrailers()");
+        this.trailersResult = trailersResult;
+        if (trailersResult.getTrailers().isEmpty()) {
             EventMessenger.sendEvent(NetEvents.ON_MOVIE_TRAILERS_NO_DATA);
         } else {
             EventMessenger.sendEvent(NetEvents.ON_MOVIE_TRAILERS_DATA_AVAILABLE);
         }
-        this.trailersResult = trailersResult;
     }
 
-    public void onNoInternet(){
+    public void onNoInternet() {
         EventMessenger.sendEvent(NetEvents.NO_INTERNET);
     }
 
-    public List<Movie> getMovies(){
+    public List<Movie> getMovies() {
         return this.movies;
     }
 
-    public List<Movie> getNextMovies() {return  this.nextMovies;}
+    public List<Movie> getNextMovies() {
+        return this.nextMovies;
+    }
 
-    public DetailedMovie getDetailedMovie() {return this.detailedMovie;}
+    public DetailedMovie getDetailedMovie() {
+        return this.detailedMovie;
+    }
 
-    public List<Trailer> getTrailersList(){
+    public List<Trailer> getTrailersList() {
+        //Log.d(MovieApplication.TAG, CLASS + "getTrailersList()");
         return this.trailersResult.getTrailers();
     }
 }
