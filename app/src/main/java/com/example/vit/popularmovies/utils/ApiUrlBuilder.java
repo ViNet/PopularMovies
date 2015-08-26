@@ -21,4 +21,9 @@ public class ApiUrlBuilder {
         final String size = "w185";
         return "http://image.tmdb.org/t/p/" + size + "/" + posterPath;
     }
+
+
+    static public String buildYoutubeImageUrl(String key){
+        return "http://img.youtube.com/vi/" + key + "/0.jpg";
+    }
 }

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.vit.popularmovies.MovieApplication;
 import com.example.vit.popularmovies.R;
 import com.example.vit.popularmovies.rest.model.Trailer;
+import com.example.vit.popularmovies.utils.ApiUrlBuilder;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -53,12 +54,11 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.ViewHo
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Picasso.with(context).load(buildYoutubeImageUrl(trailersList.get(position).getKey()))
+        Picasso.with(context).load(ApiUrlBuilder.buildYoutubeImageUrl(trailersList.get(position).getKey()))
                 .error(R.drawable.placeholder)
                 .placeholder(R.drawable.placeholder)
                 .into(holder.thumbnail);
         holder.title.setText(trailersList.get(position).getName());
-        //holder.title.setSelected(true);
     }
 
     @Override
@@ -71,9 +71,4 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.ViewHo
         this.trailersList.addAll(data);
         notifyDataSetChanged();
     }
-
-    static private String buildYoutubeImageUrl(String key){
-        return "http://img.youtube.com/vi/" + key + "/0.jpg";
-    }
-
 }
