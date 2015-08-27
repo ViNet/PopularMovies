@@ -4,7 +4,8 @@
     android:layout_height="fill_parent"
     android:background="@color/background_movie_detail">
 
-    <ScrollView
+    <com.example.vit.popularmovies.ui.view.ObservableScrollView
+        android:id="@+id/osvMainContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background_movie_detail">
@@ -21,7 +22,7 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </com.example.vit.popularmovies.ui.view.ObservableScrollView>
 
     <ProgressBar
         android:id="@+id/pbLoading"

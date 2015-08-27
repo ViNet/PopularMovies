@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.vit.popularmovies.DataController;
@@ -28,18 +29,21 @@ import com.example.vit.popularmovies.communication.NetEvents;
 import com.example.vit.popularmovies.rest.model.DetailedMovie;
 import com.example.vit.popularmovies.ui.adapter.TrailersAdapter;
 import com.example.vit.popularmovies.ui.listener.RecyclerItemClickListener;
+import com.example.vit.popularmovies.ui.view.ObservableScrollView;
 import com.example.vit.popularmovies.utils.ApiUrlBuilder;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
 
-public class MovieDetailFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener {
+public class MovieDetailFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener,
+        ObservableScrollView.ScrollViewListener{
 
     static final String CLASS = MovieDetailFragment.class.getSimpleName() + ": ";
 
     public static MovieDetailFragment instance;
 
     View view;
+    ObservableScrollView osvMainContent;
     LinearLayout containerMovieInfo;
     LinearLayout containerMovieTrailers;
     ProgressBar pbLoading;
@@ -125,6 +129,7 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
     }
 
     private void initViews() {
+        osvMainContent = (ObservableScrollView) view.findViewById(R.id.osvMainContent);
         containerMovieInfo = (LinearLayout) view.findViewById(R.id.containerMovieInfo);
         containerMovieTrailers = (LinearLayout) view.findViewById(R.id.containerMovieTrailers);
         pbLoading = (ProgressBar) view.findViewById(R.id.pbLoading);
@@ -162,6 +167,8 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
         // listeners for trailers view
         rvTrailersList.addOnItemTouchListener
                 (new RecyclerItemClickListener(getActivity().getBaseContext(), this));
+
+        osvMainContent.setScrollViewListener(this);
     }
 
     private void setupRecyclerView() {
@@ -248,5 +255,11 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
                     Uri.parse("http://www.youtube.com/watch?v=" + key));
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onScrollChanged(ScrollView scrollView, int x, int y, int oldx, int oldy) {
+        Log.d(MovieApplication.TAG, CLASS + "onScrollChanged() " +
+                "x = " + x + ",y = " + y + ", oldx = " + oldx + "oldy = " + oldy);
     }
 }
