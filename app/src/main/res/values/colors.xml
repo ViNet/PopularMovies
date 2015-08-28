@@ -9,4 +9,6 @@
     <color name="background_text_videos_preview">#b63d3d3d</color>
     <color name="text_videos_preview">#fcf8fd</color>
 
+    <color name="floating_action_button_color">#ff83c1</color>
+
 </resources>
