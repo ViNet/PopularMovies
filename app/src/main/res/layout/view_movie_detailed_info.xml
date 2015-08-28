@@ -6,25 +6,6 @@
     android:orientation="vertical"
     android:visibility="gone">
 
-    <TextView
-        android:id="@+id/tvDetailTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/background_movie_title"
-        android:includeFontPadding="false"
-        android:paddingBottom="@dimen/detail_title_vertical_padding"
-        android:paddingLeft="@dimen/detail_title_left_padding"
-        android:paddingTop="@dimen/detail_title_vertical_padding"
-        android:singleLine="true"
-        android:textColor="@color/text_movie_title"
-        android:textSize="36sp" />
-
-    <!-- SHADOW -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="@drawable/shadow_shape" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

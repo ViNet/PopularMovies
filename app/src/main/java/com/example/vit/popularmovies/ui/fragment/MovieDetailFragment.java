@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,14 +46,17 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
     public static MovieDetailFragment instance;
 
     View view;
-    ObservableScrollView osvMainContent;
+
+    CollapsingToolbarLayout collapsingToolbarLayout;
+
     LinearLayout containerMovieInfo;
     LinearLayout containerMovieTrailers;
     ProgressBar pbLoading;
     RelativeLayout noInternetView;
 
+    ImageView ivCoverImage;
+
     // views of movie info container
-    TextView tvMovieTitle;
     ImageView ivMoviePoster;
     TextView tvMovieYear;
     TextView tvMovieRuntime;
@@ -109,6 +115,7 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
         super.onViewCreated(view, savedInstanceState);
         initViews();
         setListeners();
+        initCollapseToolbar();
     }
 
     @Override
@@ -129,14 +136,14 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
     }
 
     private void initViews() {
-        osvMainContent = (ObservableScrollView) view.findViewById(R.id.osvMainContent);
         containerMovieInfo = (LinearLayout) view.findViewById(R.id.containerMovieInfo);
         containerMovieTrailers = (LinearLayout) view.findViewById(R.id.containerMovieTrailers);
         pbLoading = (ProgressBar) view.findViewById(R.id.pbLoading);
         noInternetView = (RelativeLayout) view.findViewById(R.id.noInternetView);
 
+        ivCoverImage = (ImageView) view.findViewById(R.id.ivCoverImage);
+
         //movie info views
-        tvMovieTitle = (TextView) containerMovieInfo.findViewById(R.id.tvDetailTitle);
         ivMoviePoster = (ImageView) containerMovieInfo.findViewById(R.id.ivDetailPoster);
         tvMovieYear = (TextView) containerMovieInfo.findViewById(R.id.tvDetailYear);
         tvMovieRuntime = (TextView) containerMovieInfo.findViewById(R.id.tvDetailRuntime);
@@ -168,7 +175,7 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
         rvTrailersList.addOnItemTouchListener
                 (new RecyclerItemClickListener(getActivity().getBaseContext(), this));
 
-        osvMainContent.setScrollViewListener(this);
+        //osvMainContent.setScrollViewListener(this);
     }
 
     private void setupRecyclerView() {
@@ -184,6 +191,46 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
                 new TrailersAdapter(getActivity().getBaseContext(), DataController.getInstance().getTrailersList());
         rvTrailersList.setAdapter(adapter);
     }
+
+    private void initCollapseToolbar(){
+        collapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getActivity().finish();
+                }
+            });
+
+        }
+    }
+
+
+    private void fillInfoView() {
+        DetailedMovie movie = DataController.getInstance().getDetailedMovie();
+        // set toolbar title
+        collapsingToolbarLayout.setTitle(movie.getTitle());
+
+        tvMovieYear.setText(movie.getReleaseDate());
+        tvMovieRuntime.setText(getString(R.string.runtime, movie.getRuntime()));
+        tvMovieRating.setText(getString(R.string.rating, movie.getVoteAverage()));
+        tvMovieOverview.setText(movie.getOverview());
+
+        Picasso.with(getActivity().getBaseContext())
+                .load(ApiUrlBuilder.buildPosterUrl(movie.getPosterPath()))
+                .error(R.drawable.placeholder)
+                .placeholder(R.drawable.placeholder)
+                .into(ivMoviePoster);
+
+        Picasso.with(getActivity().getBaseContext())
+                .load(ApiUrlBuilder.buildPosterUrl(movie.getBackdropPath()))
+                .error(R.drawable.placeholder)
+                .placeholder(R.drawable.placeholder)
+                .into(ivCoverImage);
+    }
+
 
     private void hideLoadingView() {
         pbLoading.setVisibility(View.GONE);
@@ -225,21 +272,6 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
         noInternetView.setVisibility(View.VISIBLE);
     }
 
-    private void fillInfoView() {
-        DetailedMovie movie = DataController.getInstance().getDetailedMovie();
-        tvMovieTitle.setText(movie.getOriginalTitle());
-        tvMovieYear.setText(movie.getReleaseDate());
-        tvMovieRuntime.setText(getString(R.string.runtime, movie.getRuntime()));
-        tvMovieRating.setText(getString(R.string.rating, movie.getVoteAverage()));
-        tvMovieOverview.setText(movie.getOverview());
-
-        Picasso.with(getActivity().getBaseContext())
-                .load(ApiUrlBuilder.buildPosterUrl(movie.getPosterPath()))
-                .error(R.drawable.placeholder)
-                .placeholder(R.drawable.placeholder)
-                .into(ivMoviePoster);
-    }
-
     @Override
     public void onItemClick(View view, int position) {
         Log.d(MovieApplication.TAG, CLASS + " click on - " + position);
@@ -261,5 +293,20 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
     public void onScrollChanged(ScrollView scrollView, int x, int y, int oldx, int oldy) {
         Log.d(MovieApplication.TAG, CLASS + "onScrollChanged() " +
                 "x = " + x + ",y = " + y + ", oldx = " + oldx + "oldy = " + oldy);
+        if(y < 0){
+            onScrollUp(y);
+        } else {
+            onScrollDown(y);
+        }
+    }
+
+    private void onScrollUp(int y){
+        //ivCoverImage.setTranslationY(ivCoverImage.getTranslationY() - );
+        //ivCoverImage.setTranslationY(ivCoverImage.getTranslationY() +  y/5);
+
+    }
+
+    private void onScrollDown(int y){
+        //ivCoverImage.setTranslationY(ivCoverImage.getTranslationY() -  y/5);
     }
 }
