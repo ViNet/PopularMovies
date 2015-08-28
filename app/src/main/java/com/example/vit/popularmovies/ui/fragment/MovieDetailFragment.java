@@ -20,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.vit.popularmovies.DataController;
@@ -32,14 +31,12 @@ import com.example.vit.popularmovies.communication.NetEvents;
 import com.example.vit.popularmovies.rest.model.DetailedMovie;
 import com.example.vit.popularmovies.ui.adapter.TrailersAdapter;
 import com.example.vit.popularmovies.ui.listener.RecyclerItemClickListener;
-import com.example.vit.popularmovies.ui.view.ObservableScrollView;
 import com.example.vit.popularmovies.utils.ApiUrlBuilder;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
 
-public class MovieDetailFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener,
-        ObservableScrollView.ScrollViewListener{
+public class MovieDetailFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener {
 
     static final String CLASS = MovieDetailFragment.class.getSimpleName() + ": ";
 
@@ -287,26 +284,5 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
                     Uri.parse("http://www.youtube.com/watch?v=" + key));
             startActivity(intent);
         }
-    }
-
-    @Override
-    public void onScrollChanged(ScrollView scrollView, int x, int y, int oldx, int oldy) {
-        Log.d(MovieApplication.TAG, CLASS + "onScrollChanged() " +
-                "x = " + x + ",y = " + y + ", oldx = " + oldx + "oldy = " + oldy);
-        if(y < 0){
-            onScrollUp(y);
-        } else {
-            onScrollDown(y);
-        }
-    }
-
-    private void onScrollUp(int y){
-        //ivCoverImage.setTranslationY(ivCoverImage.getTranslationY() - );
-        //ivCoverImage.setTranslationY(ivCoverImage.getTranslationY() +  y/5);
-
-    }
-
-    private void onScrollDown(int y){
-        //ivCoverImage.setTranslationY(ivCoverImage.getTranslationY() -  y/5);
     }
 }
