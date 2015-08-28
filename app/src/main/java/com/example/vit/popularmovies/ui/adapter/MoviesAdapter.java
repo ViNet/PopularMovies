@@ -58,7 +58,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         holder.title.setText(moviesList.get(position).getTitle());
 
         Picasso.with(context)
-                .load(ApiUrlBuilder.buildPosterUrl(moviesList.get(position).getPosterPath()))
+                .load(ApiUrlBuilder.buildImageUrl(
+                        moviesList.get(position).getPosterPath()
+                        , context.getString(R.string.poster_image_size)))
                 .error(R.drawable.placeholder)
                 .placeholder(R.drawable.placeholder)
                 .into(holder.poster);

@@ -1,0 +1,4 @@
+<resources>
+    <!-- toolbar height -->
+    <dimen name="toolbar_height">281dp</dimen>
+</resources>

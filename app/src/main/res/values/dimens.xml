@@ -11,4 +11,7 @@
 
     <dimen name="detail_content_padding">16dp</dimen>
 
+    <!-- toolbar height -->
+    <dimen name="toolbar_height">104dp</dimen>
+
 </resources>

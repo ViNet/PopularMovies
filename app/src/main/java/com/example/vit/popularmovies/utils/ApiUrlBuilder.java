@@ -17,9 +17,8 @@ public class ApiUrlBuilder {
         return options;
     }
 
-    public static String buildPosterUrl(String posterPath) {
-        final String size = "w185";
-        return "http://image.tmdb.org/t/p/" + size + "/" + posterPath;
+    public static String buildImageUrl(String path, String size) {
+        return "http://image.tmdb.org/t/p/" + size + "/" + path;
     }
 
 

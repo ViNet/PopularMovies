@@ -215,14 +215,18 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
         tvMovieRating.setText(getString(R.string.rating, movie.getVoteAverage()));
         tvMovieOverview.setText(movie.getOverview());
 
+        //Log.d(MovieApplication.TAG, CLASS + "poster size - " + getString(R.string.poster_image_size));
+        //Log.d(MovieApplication.TAG, CLASS + "backdrop size - " + getString(R.string.backdrop_image_size));
+
         Picasso.with(getActivity().getBaseContext())
-                .load(ApiUrlBuilder.buildPosterUrl(movie.getPosterPath()))
+                .load(ApiUrlBuilder.buildImageUrl(movie.getPosterPath(), getString(R.string.poster_image_size)))
                 .error(R.drawable.placeholder)
                 .placeholder(R.drawable.placeholder)
                 .into(ivMoviePoster);
 
+
         Picasso.with(getActivity().getBaseContext())
-                .load(ApiUrlBuilder.buildPosterUrl(movie.getBackdropPath()))
+                .load(ApiUrlBuilder.buildImageUrl(movie.getBackdropPath(), getString(R.string.backdrop_image_size)))
                 .error(R.drawable.placeholder)
                 .placeholder(R.drawable.placeholder)
                 .into(ivCoverImage);
