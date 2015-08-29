@@ -32,6 +32,7 @@ import com.example.vit.popularmovies.rest.model.DetailedMovie;
 import com.example.vit.popularmovies.ui.adapter.TrailersAdapter;
 import com.example.vit.popularmovies.ui.listener.RecyclerItemClickListener;
 import com.example.vit.popularmovies.utils.ApiUrlBuilder;
+import com.example.vit.popularmovies.utils.DateUtils;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
@@ -231,7 +232,7 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
         tvMovieOverview.setText(movie.getOverview());
 
         // details card
-        tvReleased.setText(movie.getReleaseDate());
+        tvReleased.setText(DateUtils.formatDate(movie.getReleaseDate()));
         tvRuntime.setText(getString(R.string.runtime_min, movie.getRuntime()));
         //tvGenres.setText("");
         tvBudget.setText(String.valueOf(movie.getBudget()));
