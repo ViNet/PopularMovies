@@ -54,10 +54,12 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
     ImageView ivCoverImage;
 
     // views of movie info container
+    TextView tvMovieTagline;
     ImageView ivMoviePoster;
     TextView tvMovieYear;
     TextView tvMovieRuntime;
     TextView tvMovieRating;
+    TextView tvMovieVoteCount;
     TextView tvMovieOverview;
 
     // views of movie trailers container
@@ -141,10 +143,12 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
         ivCoverImage = (ImageView) view.findViewById(R.id.ivCoverImage);
 
         //movie info views
+        tvMovieTagline = (TextView) containerMovieInfo.findViewById(R.id.tvDetailTagline);
         ivMoviePoster = (ImageView) containerMovieInfo.findViewById(R.id.ivDetailPoster);
-        tvMovieYear = (TextView) containerMovieInfo.findViewById(R.id.tvDetailYear);
-        tvMovieRuntime = (TextView) containerMovieInfo.findViewById(R.id.tvDetailRuntime);
+        //tvMovieYear = (TextView) containerMovieInfo.findViewById(R.id.tvDetailYear);
+        //tvMovieRuntime = (TextView) containerMovieInfo.findViewById(R.id.tvDetailRuntime);
         tvMovieRating = (TextView) containerMovieInfo.findViewById(R.id.tvDetailRating);
+        tvMovieVoteCount = (TextView) containerMovieInfo.findViewById(R.id.tvDetailVoteCount);
         tvMovieOverview = (TextView) containerMovieInfo.findViewById(R.id.tvDetailOverview);
 
         // trailers views
@@ -171,8 +175,6 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
         // listeners for trailers view
         rvTrailersList.addOnItemTouchListener
                 (new RecyclerItemClickListener(getActivity().getBaseContext(), this));
-
-        //osvMainContent.setScrollViewListener(this);
     }
 
     private void setupRecyclerView() {
@@ -210,9 +212,11 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
         // set toolbar title
         collapsingToolbarLayout.setTitle(movie.getTitle());
 
-        tvMovieYear.setText(movie.getReleaseDate());
-        tvMovieRuntime.setText(getString(R.string.runtime, movie.getRuntime()));
-        tvMovieRating.setText(getString(R.string.rating, movie.getVoteAverage()));
+        tvMovieTagline.setText(movie.getTagline());
+        //tvMovieYear.setText(movie.getReleaseDate());
+        //tvMovieRuntime.setText(getString(R.string.runtime, movie.getRuntime()));
+        tvMovieRating.setText(String.valueOf(movie.getVoteAverage()));
+        tvMovieVoteCount.setText(String.valueOf(String.format("%1$,.0f", movie.getVoteCount())));
         tvMovieOverview.setText(movie.getOverview());
 
         //Log.d(MovieApplication.TAG, CLASS + "poster size - " + getString(R.string.poster_image_size));

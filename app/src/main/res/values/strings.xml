@@ -52,12 +52,11 @@
 
     <!-- Detail activity/fragment -->
     <string name="title_detail_activity">Movie Detail</string>
+    <string name="average_rating">average rating</string>
     <string name="runtime">
-        <xliff:g id="time" example="123">%1$s</xliff:g>min
-    </string>
+        <xliff:g id="time" example="123">%1$s</xliff:g>min</string>
         <string name="rating">
-        <xliff:g id="rating" example="7.0">%1$s</xliff:g>/10
-    </string>
+        <xliff:g id="rating" example="7.0">%1$s</xliff:g>/10</string>
 
 
 </resources>

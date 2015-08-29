@@ -28,7 +28,7 @@
         android:id="@+id/rvTrailersList"
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        android:background="@color/background_movie_detail"
+        android:background="@color/background_movie_detail_primary"
         android:clickable="true"
          />
 
