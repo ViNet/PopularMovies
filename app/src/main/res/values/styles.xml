@@ -4,4 +4,24 @@
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorAccent">@color/floating_action_button_color</item>
     </style>
+
+    <style name="TextViewMovieDetail" >
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
+
+    </style>
+
+    <style name="TextViewMovieDetailKey" parent="TextViewMovieDetail" >
+        <item name="android:gravity">left</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="TextViewMovieDetailValue" parent="TextViewMovieDetail" >
+        <item name="android:gravity">right</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
 </resources>

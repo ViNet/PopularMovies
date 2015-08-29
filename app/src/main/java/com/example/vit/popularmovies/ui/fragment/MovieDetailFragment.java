@@ -56,11 +56,17 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
     // views of movie info container
     TextView tvMovieTagline;
     ImageView ivMoviePoster;
-    TextView tvMovieYear;
-    TextView tvMovieRuntime;
     TextView tvMovieRating;
     TextView tvMovieVoteCount;
     TextView tvMovieOverview;
+
+    // views of movie details card
+    TextView tvReleased;
+    TextView tvRuntime;
+    TextView tvGenres;
+    TextView tvBudget;
+    TextView tvRevenue;
+    TextView tvLanguages;
 
     // views of movie trailers container
     RecyclerView rvTrailersList;
@@ -145,11 +151,18 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
         //movie info views
         tvMovieTagline = (TextView) containerMovieInfo.findViewById(R.id.tvDetailTagline);
         ivMoviePoster = (ImageView) containerMovieInfo.findViewById(R.id.ivDetailPoster);
-        //tvMovieYear = (TextView) containerMovieInfo.findViewById(R.id.tvDetailYear);
-        //tvMovieRuntime = (TextView) containerMovieInfo.findViewById(R.id.tvDetailRuntime);
         tvMovieRating = (TextView) containerMovieInfo.findViewById(R.id.tvDetailRating);
         tvMovieVoteCount = (TextView) containerMovieInfo.findViewById(R.id.tvDetailVoteCount);
         tvMovieOverview = (TextView) containerMovieInfo.findViewById(R.id.tvDetailOverview);
+
+        // details card
+        LinearLayout llDetailsCard = (LinearLayout) containerMovieInfo.findViewById(R.id.llDetailCard);
+        tvReleased = (TextView) llDetailsCard.findViewById(R.id.tvDetailReleased);
+        tvRuntime = (TextView) llDetailsCard.findViewById(R.id.tvDetailRuntime);
+        tvGenres = (TextView) llDetailsCard.findViewById(R.id.tvDetailGenres);
+        tvBudget = (TextView) llDetailsCard.findViewById(R.id.tvDetailBudget);
+        tvRevenue = (TextView) llDetailsCard.findViewById(R.id.tvDetailRevenue);
+        tvLanguages = (TextView) llDetailsCard.findViewById(R.id.tvDetailLanguages);
 
         // trailers views
         rvTrailersList = (RecyclerView) containerMovieTrailers.findViewById(R.id.rvTrailersList);
@@ -213,11 +226,17 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
         collapsingToolbarLayout.setTitle(movie.getTitle());
 
         tvMovieTagline.setText(movie.getTagline());
-        //tvMovieYear.setText(movie.getReleaseDate());
-        //tvMovieRuntime.setText(getString(R.string.runtime, movie.getRuntime()));
         tvMovieRating.setText(String.valueOf(movie.getVoteAverage()));
         tvMovieVoteCount.setText(String.valueOf(String.format("%1$,.0f", movie.getVoteCount())));
         tvMovieOverview.setText(movie.getOverview());
+
+        // details card
+        tvReleased.setText(movie.getReleaseDate());
+        tvRuntime.setText(getString(R.string.runtime_min, movie.getRuntime()));
+        //tvGenres.setText("");
+        tvBudget.setText(String.valueOf(movie.getBudget()));
+        tvRevenue.setText(String.valueOf(movie.getRevenue()));
+        //tvLanguages.setText("");
 
         //Log.d(MovieApplication.TAG, CLASS + "poster size - " + getString(R.string.poster_image_size));
         //Log.d(MovieApplication.TAG, CLASS + "backdrop size - " + getString(R.string.backdrop_image_size));

@@ -77,10 +77,10 @@
         android:id="@+id/tvDetailOverview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/detail_content_padding"
-        android:paddingRight="@dimen/detail_content_padding"
-        android:paddingTop="@dimen/detail_content_padding"
+        android:padding="@dimen/detail_content_padding"
         android:textAppearance="@android:style/TextAppearance.Small"
         android:textColor="@color/text_secondary" />
+
+    <include layout="@layout/view_movie_detail" />
 
 </LinearLayout>
