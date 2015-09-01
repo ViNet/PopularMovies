@@ -238,7 +238,7 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
         //tvGenres.setText("");
         tvBudget.setText(TextFormatter.getCurrency(movie.getBudget()));
         tvRevenue.setText(TextFormatter.getCurrency(movie.getRevenue()));
-        //tvLanguages.setText("");
+        tvLanguages.setText(movie.getSpokenLanguagesString());
 
         //Log.d(MovieApplication.TAG, CLASS + "poster size - " + getString(R.string.poster_image_size));
         //Log.d(MovieApplication.TAG, CLASS + "backdrop size - " + getString(R.string.backdrop_image_size));

@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
+import java.util.List;
+
 
 @Parcel
 public class DetailedMovie {
@@ -36,6 +38,9 @@ public class DetailedMovie {
     private Double voteAverage;
     @SerializedName("vote_count")
     private Double voteCount;
+
+    @SerializedName("spoken_languages")
+    private List<SpokenLanguages> spokenLanguagesList;
 
     public boolean getAdult(){
         return this.adult;
@@ -115,6 +120,23 @@ public class DetailedMovie {
 
     public double getVoteCount(){
         return this.voteCount;
+    }
+
+    public List<SpokenLanguages> getSpokenLanguages(){
+        return this.spokenLanguagesList;
+    }
+
+    public String getSpokenLanguagesString(){
+        StringBuilder sb = new StringBuilder();
+        String prefix = "";
+        if(!this.spokenLanguagesList.isEmpty()){
+            for(SpokenLanguages language : this.spokenLanguagesList){
+                sb.append(prefix);
+                sb.append(language.getName());
+                prefix = ", ";
+            }
+        }
+        return sb.toString();
     }
 
 
