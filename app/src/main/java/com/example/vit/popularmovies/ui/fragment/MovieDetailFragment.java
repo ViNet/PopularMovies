@@ -33,6 +33,7 @@ import com.example.vit.popularmovies.ui.adapter.TrailersAdapter;
 import com.example.vit.popularmovies.ui.listener.RecyclerItemClickListener;
 import com.example.vit.popularmovies.utils.ApiUrlBuilder;
 import com.example.vit.popularmovies.utils.DateUtils;
+import com.example.vit.popularmovies.utils.TextFormatter;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
@@ -235,8 +236,8 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
         tvReleased.setText(DateUtils.formatDate(movie.getReleaseDate()));
         tvRuntime.setText(getString(R.string.runtime_min, movie.getRuntime()));
         //tvGenres.setText("");
-        tvBudget.setText(String.valueOf(movie.getBudget()));
-        tvRevenue.setText(String.valueOf(movie.getRevenue()));
+        tvBudget.setText(TextFormatter.getCurrency(movie.getBudget()));
+        tvRevenue.setText(TextFormatter.getCurrency(movie.getRevenue()));
         //tvLanguages.setText("");
 
         //Log.d(MovieApplication.TAG, CLASS + "poster size - " + getString(R.string.poster_image_size));
