@@ -6,7 +6,7 @@ import org.parceler.Parcel;
 
 //"spoken_languages":[{"iso_639_1":"en","name":"English"}
 @Parcel
-public class SpokenLanguages {
+public class SpokenLanguage {
 
     @SerializedName("iso_639_1")
     private String isoCode;

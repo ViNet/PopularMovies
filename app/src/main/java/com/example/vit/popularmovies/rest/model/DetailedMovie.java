@@ -40,7 +40,9 @@ public class DetailedMovie {
     private Double voteCount;
 
     @SerializedName("spoken_languages")
-    private List<SpokenLanguages> spokenLanguagesList;
+    private List<SpokenLanguage> spokenLanguagesList;
+    @SerializedName("genres")
+    private List<Genre> genresList;
 
     public boolean getAdult(){
         return this.adult;
@@ -122,17 +124,34 @@ public class DetailedMovie {
         return this.voteCount;
     }
 
-    public List<SpokenLanguages> getSpokenLanguages(){
+    public List<SpokenLanguage> getSpokenLanguages(){
         return this.spokenLanguagesList;
+    }
+
+    public List<Genre> getGenresList(){
+        return this.genresList;
     }
 
     public String getSpokenLanguagesString(){
         StringBuilder sb = new StringBuilder();
         String prefix = "";
         if(!this.spokenLanguagesList.isEmpty()){
-            for(SpokenLanguages language : this.spokenLanguagesList){
+            for(SpokenLanguage language : this.spokenLanguagesList){
                 sb.append(prefix);
                 sb.append(language.getName());
+                prefix = ", ";
+            }
+        }
+        return sb.toString();
+    }
+
+    public String getGenresString(){
+        StringBuilder sb = new StringBuilder();
+        String prefix = "";
+        if(!this.genresList.isEmpty()){
+            for(Genre genre : this.genresList){
+                sb.append(prefix);
+                sb.append(genre.getName().toLowerCase());
                 prefix = ", ";
             }
         }

@@ -235,7 +235,7 @@ public class MovieDetailFragment extends Fragment implements RecyclerItemClickLi
         // details card
         tvReleased.setText(DateUtils.formatDate(movie.getReleaseDate()));
         tvRuntime.setText(getString(R.string.runtime_min, movie.getRuntime()));
-        //tvGenres.setText("");
+        tvGenres.setText(movie.getGenresString());
         tvBudget.setText(TextFormatter.getCurrency(movie.getBudget()));
         tvRevenue.setText(TextFormatter.getCurrency(movie.getRevenue()));
         tvLanguages.setText(movie.getSpokenLanguagesString());
