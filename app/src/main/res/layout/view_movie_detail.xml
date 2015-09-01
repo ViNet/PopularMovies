@@ -2,17 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#eaeaea"
+    android:id="@+id/llDetailCard"
+    android:padding="@dimen/detail_content_padding"
+    android:background="@color/background_movie_detail_primary"
     android:orientation="vertical">
-
-    <LinearLayout
-        android:id="@+id/llDetailCard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/detail_content_padding"
-        android:background="@color/background_movie_detail_primary"
-        android:orientation="vertical"
-        android:padding="@dimen/detail_content_padding">
 
         <TextView
             android:id="@+id/info_text"
@@ -36,8 +29,7 @@
 
             <TextView
                 android:id="@+id/tvDetailReleased"
-                style="@style/TextViewMovieDetailValue"
-                android:text="November, 2015" />
+                style="@style/TextViewMovieDetailValue" />
 
         </LinearLayout>
 
@@ -53,8 +45,7 @@
 
             <TextView
                 android:id="@+id/tvDetailRuntime"
-                style="@style/TextViewMovieDetailValue"
-                android:text="124min" />
+                style="@style/TextViewMovieDetailValue" />
 
         </LinearLayout>
 
@@ -69,8 +60,7 @@
 
             <TextView
                 android:id="@+id/tvDetailGenres"
-                style="@style/TextViewMovieDetailValue"
-                android:text="adventure, triller"/>
+                style="@style/TextViewMovieDetailValue"/>
 
         </LinearLayout>
 
@@ -85,8 +75,7 @@
 
             <TextView
                 android:id="@+id/tvDetailBudget"
-                style="@style/TextViewMovieDetailValue"
-                android:text="$ 122 454 455" />
+                style="@style/TextViewMovieDetailValue" />
 
         </LinearLayout>
 
@@ -101,8 +90,7 @@
 
             <TextView
                 android:id="@+id/tvDetailRevenue"
-                style="@style/TextViewMovieDetailValue"
-                android:text="$ 98 454 455" />
+                style="@style/TextViewMovieDetailValue" />
 
         </LinearLayout>
 
@@ -117,11 +105,8 @@
 
             <TextView
                 android:id="@+id/tvDetailLanguages"
-                style="@style/TextViewMovieDetailValue"
-                android:text="english" />
+                style="@style/TextViewMovieDetailValue" />
 
         </LinearLayout>
-
-    </LinearLayout>
 
 </LinearLayout>

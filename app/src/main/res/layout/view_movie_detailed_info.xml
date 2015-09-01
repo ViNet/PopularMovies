@@ -81,6 +81,13 @@
         android:textAppearance="@android:style/TextAppearance.Small"
         android:textColor="@color/text_secondary" />
 
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="@dimen/detail_content_padding"
+        android:background="@color/text_secondary" />
+
     <include layout="@layout/view_movie_detail" />
 
 </LinearLayout>

@@ -55,6 +55,7 @@
     <string name="average_rating">average rating</string>
     <string name="runtime_min"><xliff:g id="time" example="123">%1$s</xliff:g>&#32;min</string>
     <string name="details">Details</string>
+    <string name="trailers">Trailers</string>
     <string name="released">Released</string>
     <string name="runtime">Runtime</string>
     <string name="genres">Genres</string>

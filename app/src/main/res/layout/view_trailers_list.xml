@@ -3,26 +3,27 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:id="@+id/containerMovieTrailers"
-    android:paddingBottom="16dp"
+    android:paddingBottom="1dp"
+    android:background="@color/background_movie_detail_primary"
     android:visibility="gone">
-    <!-- vertical divider -->
+
+    <!-- Divider -->
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginBottom="@dimen/detail_content_padding"
-        android:layout_marginLeft="@dimen/detail_content_padding"
-        android:layout_marginRight="@dimen/detail_content_padding"
-        android:layout_marginTop="@dimen/detail_content_padding"
-        android:background="@color/text_primary" />
+        android:layout_height="1dp"
+        android:layout_margin="@dimen/detail_content_padding"
+        android:background="@color/text_secondary" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/detail_content_padding"
         android:paddingRight="@dimen/detail_content_padding"
-        android:text="Trailers"
+        android:paddingBottom="8dp"
+        android:text="@string/trailers"
         android:textColor="@color/text_primary"
-        android:textSize="18sp" />
+        android:textAppearance="@android:style/TextAppearance.Medium" />
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvTrailersList"

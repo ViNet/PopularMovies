@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="background_movie_detail_primary">#ffffff</color>
-    <color name="background_movie_detail_secondary">#dedede</color>
 
     <color name="text_primary">#212121</color>
     <color name="text_secondary">#616161</color>
