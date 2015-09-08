@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         //Log.d(MovieApplication.TAG, CLASS + "onCreate()");
         setContentView(R.layout.activity_main);
         initToolbar();
-        startFragment();
+        //startFragment();
     }
 
     @Override
@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void startFragment() {
         //Log.d(MovieApplication.TAG, CLASS + "startFragment()");
+        /*
         moviesFragment = (MoviesFragment) getFragmentManager().findFragmentById(R.id.movies_container);
         if (moviesFragment == null) {
             //Log.d(MovieApplication.TAG, CLASS + "create new instance of movie fragment");
@@ -61,5 +62,6 @@ public class MainActivity extends AppCompatActivity {
             getFragmentManager().beginTransaction().
                     replace(R.id.movies_container, moviesFragment).commit();
         }
+        */
     }
 }
