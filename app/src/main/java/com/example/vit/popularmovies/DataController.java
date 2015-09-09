@@ -60,7 +60,9 @@ public class DataController {
 
         if (dc.getMovies() == null) {
             // load from internet
-            RestClient.getInstance().loadMovies(ApiUrlBuilder.buildGetMoviesOptions(dc.getPageId()), customer);
+            RestClient.getInstance().loadMovies(
+                    ApiUrlBuilder.buildGetMoviesOptions(dc.getPageId(), customer)
+                    , customer);
             //Log.d(MovieApplication.TAG, CLASS + ApiUrlBuilder.buildGetMoviesOptions(pageId));
         } else {
             // load from cache
@@ -85,9 +87,11 @@ public class DataController {
         Log.d(MovieApplication.TAG, CLASS + "loadMoreMovies() c = " + customer);
         if(cacheHashMap.containsKey(customer)){
             DataCache dc = cacheHashMap.get(customer);
-            RestClient.getInstance().loadMovies(ApiUrlBuilder.buildGetMoviesOptions(dc.getPageId() + 1), customer);
+            RestClient.getInstance().loadMovies(
+                    ApiUrlBuilder.buildGetMoviesOptions(dc.getPageId() + 1, customer)
+                    , customer);
             Log.d(MovieApplication.TAG,
-                    CLASS + ApiUrlBuilder.buildGetMoviesOptions(dc.getPageId() + 1) + "c = " + customer);
+                    CLASS + ApiUrlBuilder.buildGetMoviesOptions(dc.getPageId() + 1, customer) + "c = " + customer);
         }
     }
 
