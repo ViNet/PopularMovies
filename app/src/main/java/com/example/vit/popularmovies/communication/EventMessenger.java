@@ -1,8 +1,6 @@
 package com.example.vit.popularmovies.communication;
 
 
-import android.content.Context;
-
 import com.squareup.otto.Bus;
 
 public class EventMessenger {
@@ -24,5 +22,9 @@ public class EventMessenger {
 
     static public void sendEvent(NetEvents event){
         EventMessenger.bus.post(event);
+    }
+
+    static public void sendEvent(NetEvents event, String receiver){
+        EventMessenger.bus.post(new Event(event,receiver));
     }
 }
