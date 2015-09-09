@@ -157,6 +157,10 @@ public class DataController {
         EventMessenger.sendEvent(NetEvents.NO_INTERNET);
     }
 
+    public void onNoInternet(String customer){
+        EventMessenger.sendEvent(NetEvents.NO_INTERNET, customer);
+    }
+
     public List<Movie> getMovies(String customer) {
         if(cacheHashMap.containsKey(customer)){
             DataCache dc = cacheHashMap.get(customer);

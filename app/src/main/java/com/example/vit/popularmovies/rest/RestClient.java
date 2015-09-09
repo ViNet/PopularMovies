@@ -71,7 +71,7 @@ public class RestClient {
                 }
             });
         } else {
-            DataController.getInstance().onNoInternet();
+            DataController.getInstance().onNoInternet(customer);
         }
     }
 
