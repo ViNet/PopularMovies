@@ -56,13 +56,13 @@ public class RestClient {
         return apiService;
     }
 
-    public void loadMovies(Map<String, String> options) {
+    public void loadMovies(Map<String, String> options, final String customer) {
         if (NetworkUtil.getConnectivityStatus(MovieApplication.getContext()) != NetworkUtil.TYPE_NOT_CONNECTED) {
             apiService.getMovies(options, ApiConfig.API_KEY, new Callback<Page>() {
                 @Override
                 public void success(Page page, Response response) {
                     Log.d(MovieApplication.TAG, CLASS + "loadMovies.success()");
-                    DataController.getInstance().onLoadedMovies(page);
+                    DataController.getInstance().onLoadedMovies(page, customer);
                 }
 
                 @Override

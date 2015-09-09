@@ -13,6 +13,7 @@ import com.example.vit.popularmovies.rest.model.Trailer;
 import com.example.vit.popularmovies.rest.model.TrailersResult;
 import com.example.vit.popularmovies.utils.ApiUrlBuilder;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -24,10 +25,8 @@ public class DataController {
 
     private static DataController dataController;
 
-    // app's data cache
-    private List<Movie> movies;
-    private List<Movie> nextMovies;     // next loaded page of movies
-    private int pageId = ApiConfig.START_PAGE_ID;
+    // app cache data for each fragment
+    HashMap<String, DataCache> cacheHashMap = new HashMap<>();
 
     private DetailedMovie detailedMovie;
     private TrailersResult trailersResult;
@@ -40,21 +39,32 @@ public class DataController {
     }
 
     public void clearData() {
-        this.movies = null;
-        this.nextMovies = null;
-        pageId = ApiConfig.START_PAGE_ID;
+        //this.movies = null;
+        //this.nextMovies = null;
+        //pageId = ApiConfig.START_PAGE_ID;
     }
 
     // CALLED FROM UI
 
-    public void loadMovies() {
-        if (this.movies == null) {
+    public void loadMovies(String customer) {
+
+        Log.d(MovieApplication.TAG, CLASS + "loadMovies() c = " + customer);
+
+        DataCache dc;
+        if(!cacheHashMap.containsKey(customer)){
+            dc = new DataCache(customer);
+            cacheHashMap.put(customer, dc);
+        } else {
+            dc = cacheHashMap.get(customer);
+        }
+
+        if (dc.getMovies() == null) {
             // load from internet
-            RestClient.getInstance().loadMovies(ApiUrlBuilder.buildGetMoviesOptions(pageId));
+            RestClient.getInstance().loadMovies(ApiUrlBuilder.buildGetMoviesOptions(dc.getPageId()), customer);
             //Log.d(MovieApplication.TAG, CLASS + ApiUrlBuilder.buildGetMoviesOptions(pageId));
         } else {
             // load from cache
-            EventMessenger.sendEvent(NetEvents.ON_DATA_AVAILABLE);
+            EventMessenger.sendEvent(NetEvents.ON_DATA_AVAILABLE, customer);
         }
     }
 
@@ -71,9 +81,14 @@ public class DataController {
         }
     }
 
-    public void loadMoreMovies() {
-        RestClient.getInstance().loadMovies(ApiUrlBuilder.buildGetMoviesOptions(pageId + 1));
-        Log.d(MovieApplication.TAG, CLASS + ApiUrlBuilder.buildGetMoviesOptions(pageId + 1));
+    public void loadMoreMovies(String customer) {
+        Log.d(MovieApplication.TAG, CLASS + "loadMoreMovies() c = " + customer);
+        if(cacheHashMap.containsKey(customer)){
+            DataCache dc = cacheHashMap.get(customer);
+            RestClient.getInstance().loadMovies(ApiUrlBuilder.buildGetMoviesOptions(dc.getPageId() + 1), customer);
+            Log.d(MovieApplication.TAG,
+                    CLASS + ApiUrlBuilder.buildGetMoviesOptions(dc.getPageId() + 1) + "c = " + customer);
+        }
     }
 
     public void loadTrailers(int movieId) {
@@ -96,17 +111,24 @@ public class DataController {
 
     // CALLED FROM REST CLIENT
 
-    public void onLoadedMovies(Page page) {
-        this.pageId = page.getPage();
+    public void onLoadedMovies(Page page, String customer) {
+        Log.d(MovieApplication.TAG, CLASS + "onLoadedMovies() c = " + customer);
+        DataCache dc;
+        if(cacheHashMap.containsKey(customer)){
+            dc = cacheHashMap.get(customer);
+        } else {
+            return;
+        }
+        int pageId = page.getPage();
+        dc.setPageId(pageId);
         if (pageId == ApiConfig.START_PAGE_ID) {
             // set new data
-            this.movies = page.getMovies();
-            EventMessenger.sendEvent(NetEvents.ON_DATA_AVAILABLE);
+            dc.setMovies(page.getMovies());
+            EventMessenger.sendEvent(NetEvents.ON_DATA_AVAILABLE, customer);
         } else if (pageId > ApiConfig.START_PAGE_ID) {
             // add new data
-            this.nextMovies = page.getMovies();
-            this.movies.addAll(nextMovies);
-            EventMessenger.sendEvent(NetEvents.ON_LOAD_MORE_DATA_AVAILABLE);
+            dc.setNextMovies(page.getMovies());
+            EventMessenger.sendEvent(NetEvents.ON_LOAD_MORE_DATA_AVAILABLE, customer);
         } else {
             // page is empty
         }
@@ -131,12 +153,20 @@ public class DataController {
         EventMessenger.sendEvent(NetEvents.NO_INTERNET);
     }
 
-    public List<Movie> getMovies() {
-        return this.movies;
+    public List<Movie> getMovies(String customer) {
+        if(cacheHashMap.containsKey(customer)){
+            DataCache dc = cacheHashMap.get(customer);
+            return dc.getMovies();
+        }
+        return null;
     }
 
-    public List<Movie> getNextMovies() {
-        return this.nextMovies;
+    public List<Movie> getNextMovies(String customer) {
+        if(cacheHashMap.containsKey(customer)){
+            DataCache dc = cacheHashMap.get(customer);
+            return dc.getNextMovies();
+        }
+        return null;
     }
 
     public DetailedMovie getDetailedMovie() {
