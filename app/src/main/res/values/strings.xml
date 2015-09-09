@@ -46,6 +46,10 @@
 
 
     <!-- Main activity/fragment -->
+    <!-- TABS -->
+    <string name="popular">popular</string>
+    <string name="most_voted">most voted</string>
+    <string name="top_rated">top rated</string>
     <string name="no_network_connection">There\'s no network connection right now. Try again later.</string>
     <string name="retry">Retry</string>
 

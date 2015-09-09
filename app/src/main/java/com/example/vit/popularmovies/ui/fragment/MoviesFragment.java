@@ -1,11 +1,13 @@
 package com.example.vit.popularmovies.ui.fragment;
 
-import android.app.Fragment;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +18,10 @@ import android.widget.Toast;
 
 import com.example.vit.popularmovies.DataController;
 import com.example.vit.popularmovies.ExtraName;
+import com.example.vit.popularmovies.MovieApplication;
 import com.example.vit.popularmovies.R;
 import com.example.vit.popularmovies.communication.BusProvider;
+import com.example.vit.popularmovies.communication.Event;
 import com.example.vit.popularmovies.communication.NetEvents;
 import com.example.vit.popularmovies.rest.model.Movie;
 import com.example.vit.popularmovies.ui.activity.DetailActivity;
@@ -32,11 +36,10 @@ import java.util.List;
  * Fragment with grid that contains movie posters
  */
 public class MoviesFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener
-        , EndlessRecyclerOnScrollListener.OnLoadMoreListener{
+        , EndlessRecyclerOnScrollListener.OnLoadMoreListener {
 
     private final static String CLASS = MoviesFragment.class.getSimpleName() + ": ";
-
-    public static MoviesFragment instance;
+    private String TAG;
 
     private RecyclerView recyclerView;
     private GridLayoutManager layoutManager;
@@ -48,20 +51,28 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
 
     private View view;
 
-    public static MoviesFragment getInstance() {
-        if (instance == null) {
-            instance = new MoviesFragment();
-        }
-        return instance;
+    public static MoviesFragment newInstance(String TAG) {
+        MoviesFragment fragment = new MoviesFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("tag", TAG);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Subscribe
-    public void onEvent(NetEvents event) {
-        switch (event){
+    public void onEvent(Event event) {
+        NetEvents eventType;
+        if (TAG.equals(event.getReceiver())) {
+            eventType = event.getEvent();
+        } else {
+            return;
+        }
+
+        switch (eventType) {
             case ON_DATA_AVAILABLE:
                 //Log.d(MovieApplication.TAG, CLASS + "ON_DATA_AVAILABLE");
-                List<Movie> movies = DataController.getInstance().getMovies();
-                if(movies.isEmpty()){
+                List<Movie> movies = DataController.getInstance().getMovies(TAG);
+                if (movies.isEmpty()) {
                     // movies on this request has been not found
                 } else {
                     adapter.setData(movies);
@@ -70,10 +81,10 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
                 }
                 break;
             case ON_LOAD_MORE_DATA_AVAILABLE:
-                adapter.addData(DataController.getInstance().getNextMovies());
+                adapter.addData(DataController.getInstance().getNextMovies(TAG));
                 break;
             case NO_INTERNET:
-                if(adapter.getItemCount() == 0){
+                if (adapter.getItemCount() == 0) {
                     showNoInternetView();
                 } else {
                     showNoInternetToast();
@@ -83,10 +94,17 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
         }
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        TAG = getArguments().getString("tag");
+        Log.d(MovieApplication.TAG, CLASS + TAG + "onCreate()");
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //Log.d(MovieApplication.TAG, CLASS + "onCreateView()");
+        //Log.d(MovieApplication.TAG, CLASS + TAG + "onCreateView()");
         view = inflater.inflate(R.layout.fragment_grid_movies, container, false);
         return view;
     }
@@ -94,7 +112,7 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //Log.d(MovieApplication.TAG, CLASS + "onViewCreated()");
+        //Log.d(MovieApplication.TAG, CLASS + TAG + "onViewCreated()");
         initViews();
         setupRecyclerView();
         setListeners();
@@ -103,15 +121,15 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
     @Override
     public void onStart() {
         super.onStart();
-        //Log.d(MovieApplication.TAG, CLASS + "onStart()");
+        Log.d(MovieApplication.TAG, CLASS + TAG + " onStart()");
         BusProvider.getInstance().register(this);
-        DataController.getInstance().loadMovies();
+        DataController.getInstance().loadMovies(TAG);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        //Log.d(MovieApplication.TAG, CLASS + "onStop()");
+        Log.d(MovieApplication.TAG, CLASS + TAG + " onStop()");
         BusProvider.getInstance().unregister(this);
     }
 
@@ -137,7 +155,7 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
             public void onClick(View v) {
                 //Log.d(MovieApplication.TAG, CLASS + "retry");
                 showLoadingView();
-                DataController.getInstance().loadMovies();
+                DataController.getInstance().loadMovies(TAG);
             }
         });
     }
@@ -156,38 +174,38 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
     }
 
     // hide progress bar
-    private void hideLoadingView(){
+    private void hideLoadingView() {
         pbLoading.setVisibility(View.GONE);
     }
 
-    private void hideContentView(){
+    private void hideContentView() {
         recyclerView.setVisibility(View.GONE);
     }
 
-    private void hideNoInternetView(){
+    private void hideNoInternetView() {
         noInternetView.setVisibility(View.GONE);
     }
 
-    private void showNoInternetView(){
+    private void showNoInternetView() {
         hideContentView();
         hideLoadingView();
         noInternetView.setVisibility(View.VISIBLE);
         noInternetView.bringToFront();
     }
 
-    private void showLoadingView(){
+    private void showLoadingView() {
         hideContentView();
         hideNoInternetView();
         pbLoading.setVisibility(View.VISIBLE);
     }
 
-    private void showContentView(){
+    private void showContentView() {
         hideNoInternetView();
         hideLoadingView();
         recyclerView.setVisibility(View.VISIBLE);
     }
 
-    private void showNoInternetToast(){
+    private void showNoInternetToast() {
         Toast.makeText(
                 getActivity().getBaseContext()
                 , getString(R.string.no_network_connection)
@@ -213,6 +231,6 @@ public class MoviesFragment extends Fragment implements RecyclerItemClickListene
     @Override
     public void onLoadMore() {
         //Log.d(MovieApplication.TAG, CLASS + "onLoadMore()");
-        DataController.getInstance().loadMoreMovies();
+        DataController.getInstance().loadMoreMovies(TAG);
     }
 }

@@ -1,6 +1,6 @@
 package com.example.vit.popularmovies.ui.listener;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
